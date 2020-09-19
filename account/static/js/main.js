@@ -1,5 +1,4 @@
 if ('serviceWorker' in navigator) {
-  console.log("hellow");
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js').then(function(registration) {
       // Registration was successful
