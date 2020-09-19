@@ -8,9 +8,11 @@ from django.utils import timezone, dateformat
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_protect
 import json
 
 # Create your views here.
+@csrf_protect
 @login_required
 def index(request):
     getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
