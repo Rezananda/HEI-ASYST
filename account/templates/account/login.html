@@ -12,7 +12,7 @@
                 <h5 class="card-title text-primary">MASUK</h5>
                 <hr>
                 <form method="POST" action="/login/">
-                    {{ csrf_input }}
+                    {% csrf_token %}
                     <div class="form-group">
                         <input type="text" name='inisial' class="form-control" id="inisial" placeholder="Inisial" required>
                     </div>
