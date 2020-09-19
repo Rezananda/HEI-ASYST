@@ -1,0 +1,31 @@
+{% extends 'account/base.html' %}
+
+    {% block title %}
+    MASUK HEI-ASYST
+    {% endblock %}
+
+    {% block content %}
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-primary">MASUK</h5>
+                <hr>
+                <form method="POST" action="/login/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" name='inisial' class="form-control" id="inisial" placeholder="Inisial" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name='password' class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                    </div>
+                    <div class="text-account">
+                        Belum punya akun? klik <a href="/register"><b>disini</b></a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Masuk</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

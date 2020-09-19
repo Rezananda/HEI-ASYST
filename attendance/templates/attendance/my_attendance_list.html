@@ -1,0 +1,118 @@
+{% extends 'attendance/base_add.html' %}
+
+{% block title %}
+Kehadiran
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+  <tbody>
+  {% for data in attendance %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ data.created_at | date:'Y-m-d' }}</td>
+      <td>{{ data.work_status }}</td>
+      <td><h5><a onclick="getStuff({{ data.id }}); slideShow()" class="badge badge-primary text-white">Detail</a></h5></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div id="slideup" class="panel">
+  <div class="modal-header">
+    <h5 class="modal-title">DETAIL</h5>
+    <button onclick="slideHide()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="container" style="margin-bottom: 65px; height: 350px; overflow-y: auto;">
+    <div id="something"></div>
+  </div>
+</div>
+<div id="backdrop" onclick="slideHide()"></div>
+<script>
+  function slideShow(){
+    jQuery('#slideup').slideDown(600);
+    document.getElementById("backdrop").style.width = "100%";
+    document.getElementById("backdrop").style.opacity = "0.5";    
+  }
+
+  function slideHide(){
+    jQuery('#slideup').slideUp(600);
+    document.getElementById("backdrop").style.width = "0";
+    document.getElementById("backdrop").style.opacity = "0";
+    $("#something").html("");
+  } 
+
+  function getStuff(elem) {
+    const id = elem;
+    
+    $.ajax({
+      url:window.location.pathname + id,
+      type:'GET',
+      contentType:'application/json; charset=utf-8',
+      dataType:'json',
+      success:function (result) {
+        $('#something').html(`
+        <div style='margin-top:10px'></div>
+        <table class="table borderless">
+          <tbody>
+            <tr>
+              <td>Hasil Selfass</td>
+              <td>${result.attendance.selfass }</td>
+            </tr>
+            <tr>
+              <td>Status Kehadiran</td>
+              <td>${result.attendance.attendance }</td>
+            </tr>
+            <tr>
+              <td>Alasan Tidak Hadir</td>
+              <td>${result.attendance.reasonNotPresent }</td>
+            </tr>
+            <tr>
+              <td>Alasan Tidak Hadir Lainnya</td>
+              <td>${result.attendance.otherNotPresent }</td>
+            </tr>
+            <tr>
+              <td>Status Kesehatan</td>
+              <td>${result.attendance.condition}</td>
+            </tr>
+            <tr>
+              <td>Alasan Sakit</td>
+              <td>${result.attendance.sickChoices}</td>
+            </tr>
+            <tr>
+              <td>Alasan Sakit Lainnya</td>
+              <td>${result.attendance.otherSicks}</td>
+            </tr>
+            <tr>
+              <td>WFO/WFH</td>
+              <td>${result.attendance.work_status}</td>
+            </tr>
+            <tr>
+              <td>Waktu WFO</td>
+              <td>${result.attendance.wfo_description}</td>
+            </tr>
+            <tr>
+              <td>Tanggal Isi</td>
+              <td>${result.attendance.date_created}</td>
+            </tr>
+            <tr>
+              <td>Waktu Isi</td>
+              <td>${result.attendance.time_created}</td>
+            </tr>
+          </tbody>
+        </table>
+        <a href="/my-attend-list-edit/${result.attendance.id }"><button style='position:fixed; bottom:0; left:0; right:0; margin:auto; max-width: 90%; margin-bottom:10px; border-radius: 25px'class="btn btn-primary btn-block btn-lg" role="button">Ubah</button></a>
+        `)
+      },
+      error: function (response) {
+        console.log(response)
+      }
+    });
+  }
+</script>
+{% endblock %}
+
+

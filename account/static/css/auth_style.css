@@ -1,0 +1,46 @@
+/* Bottom navbar start */
+.text-white {
+    font-weight: 500;
+}
+
+.container.lead {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* body start */
+.card-title, .card-text {
+    text-align: center;
+}
+
+.card-title {
+    font-size: 19px;
+}
+
+.card {
+    border-style: none;
+    margin-top: 40px;
+    border-radius: 20px;
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+    border-radius: 20px;
+}
+
+.btn.btn-primary.btn-block {
+    border-radius: 20px;
+}
+
+.text-account {
+    text-align: center;
+}
+
+/* body end */

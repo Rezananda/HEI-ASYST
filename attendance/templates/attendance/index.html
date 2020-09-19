@@ -1,0 +1,132 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}
+HEI-ASYST
+{% endblock %}
+
+{% block content %}
+<h5 class="card-title text-primary">STATUS KEHADIRAN</h5>
+<hr>
+{% if attend %}
+  <div class="alert alert-primary text-center" role="alert">
+    Hari ini kamu <b><u>{{ status_attend }}</u></b> isi kehadiran
+  </div>
+  {% load static %}
+  <img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image">
+  {% if status_attend == 'SUDAH' %}
+  <button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" onclick="slideShow()">Kehadiran Hari Ini</button>
+  <div id="slideup" class="panel">
+    <div class="modal-header">
+      <h5 class="modal-title">DATA KEHADIRAN HARI INI</h5>
+      <button onclick="slideHide()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="container">
+    <table class="table borderless">
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Tanggal isi</td>
+          <td>{{ date | date:'d-m-Y' }}</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Waktu isi </td>
+          <td>{{ date | date:'H:i' }}</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Status Kehadiran</td>
+          <td>{{ attend }}</td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td>Status Kesehatan</td>
+          <td>{{ condition }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  
+  {% elif status_attend == 'BELUM'  %}
+  <button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" onclick="slideShow()">Yuk Isi Kehadiran</button>
+  <div id="slideup" class="panel">
+    <div class="modal-header">
+      <h5 class="modal-title">DATA KEHADIRAN KEMARIN</h5>
+      <button onclick="slideHide()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="container">
+    <table class="table borderless">
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Tanggal isi</td>
+          <td>{{ date | date:'d-m-Y' }}</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Waktu isi </td>
+          <td>{{ date | date:'H:i' }}</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Status Kehadiran</td>
+          <td>{{ attend }}</td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td>Status Kesehatan</td>
+          <td>{{ condition }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    <p class="text-center">Apakah datamu sama seperti data diatas?</p>
+    <div class="d-flex justify-content-center buttonisikehadiran">
+      <a class="btn btn-outline-primary" href="/add-edit-attend" style="width:150px" role="button">Berbeda</a></li>&nbsp;
+      &nbsp;<button type="button" class="btn btn-primary" data-toggle="modal" style="width:150px" onclick="slideHide()" data-target="#exampleModal">Sama</button></li>
+    </div>
+    <div style="height: 30px;"></div>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Perhatian!!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Apakah kamu sebelumnya sudah isi self assesment?
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-primary" href="/add-edit-attend" role="button">Sudah</a>
+          <a class="btn btn-outline-primary" href="https://selfass.bca.co.id/" target="_blank" role="button">Belum</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+{% else %}
+  <div class="alert alert-primary text-center" role="alert">
+    Kamu belum ada data kehadiran
+  </div>
+  {% load static %}
+  <img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image">
+  <a href="/add-attend"><button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" role="button">Yuk Tambah Data</button></a>
+{% endif %}
+
+<!-- {% load static %}
+<img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image"> -->
+
+<div id="backdrop" onclick="slideHide()"></div>
+
+{% endblock %}

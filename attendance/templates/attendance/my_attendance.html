@@ -1,0 +1,21 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}
+Kehadiran
+{% endblock %}
+
+{% block content %}
+
+<h5 class="card-title text-primary">DATA SAYA</h5>
+<hr>
+<div class="chart">
+    <canvas id="myCharts" height="250"></canvas>
+    <canvas id="myChartss" height="250"></canvas>
+</div>
+<div class="container">
+    <a href="/my-attend-list"><button id="chartbutton" class="btn btn-outline-primary btn-block btn-lg">Detail</button></a>
+</div>
+   
+{% endblock %}
+
+

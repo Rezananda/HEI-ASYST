@@ -1,0 +1,30 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}
+Kehadiran
+{% endblock %}
+
+{% block content %}
+
+<h5 class="card-title text-primary">KEHADIRAN</h5>
+<hr>
+<div class="form-group">
+    <textarea class="form-control" id="myInput" rows="10" readonly>Selamat Pagi,
+{% for datas in data %}{{ forloop.counter }}. {{ datas }} 
+{% endfor %}
+    </textarea>
+</div>
+<div class="container">
+    <button id="chartbutton" type="button" class="btn btn-outline-primary btn-block btn-lg" onclick="myFunction()">Kirim</button>
+</div>
+<script>
+function myFunction() {
+    var copyText = document.getElementById("myInput").value;
+    var encode = encodeURI(copyText)
+    window.location='https://api.whatsapp.com/send?phone=&text='+encode
+    }
+</script>
+
+{% endblock %}
+
+

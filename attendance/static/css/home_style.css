@@ -1,0 +1,173 @@
+div.jumbotron-base {
+    height: 150px;
+}
+
+div.container.lead {
+    margin-top: -25px;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-size: 21px;
+}
+
+div.text-lead {
+    padding-left: 10px;
+}
+
+div.card {
+    border-style: none;
+}
+
+div.card-body {
+    margin-top: -93px;
+    border-top-left-radius: 45px 45px;
+    border-top-right-radius: 45px 45px;
+}
+
+nav.nav-bottom {
+    position: fixed;
+    bottom: 0;
+    height: 55px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    background-color: #007bff;
+    display: flex;
+    overflow-x: auto;
+    z-index: 1;
+    border-radius: 30px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    max-width: 95%;
+    margin-bottom: 10px;
+}
+
+a.nav_link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.1s ease-in-out;
+}
+
+a.nav_link:hover {
+    background-color: #47a0ff;
+}
+
+/* a.nav_link--active {
+    color: #17a2b8;
+} */
+
+i.nav_icon {
+    font-size: 30px;
+}
+
+h5.card-title {
+    text-align: center;
+    font-size: 19px;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+div#panel {
+    display: none;
+}
+
+div.buttonisikehadiran {
+    margin-top: 10px;
+}
+
+div.buttonisikehadiran a {
+    width: 100px;
+}
+
+img.health-image {
+    position: fixed;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 115px;
+    z-index: 0;
+}
+
+/* div.panel {
+    background-color: white;
+} */
+
+.chart {
+    display: flex;
+    overflow-x: scroll;
+}
+
+button#chartbutton {
+    height: 45px;
+    position: fixed; 
+    bottom: 0;
+    right: 0;
+    left: 0; 
+    z-index: 2; 
+    margin: auto; 
+    max-width: 90%; 
+    margin-bottom: 90px;
+    border-radius: 30px;
+}
+
+div#slideup {
+
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position:fixed;
+    bottom:0;
+    /* width:100%; */
+    display:none;
+    /* background-color: aliceblue; */
+    /* padding: 20px; */
+    z-index: 2;
+    max-width: 100%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    /* height: 300px; */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+.borderless td, .borderless th {
+    border: none;
+  }
+
+.modal-backdrop.in {
+    opacity: 0.9;
+  }
+
+div#backdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  z-index: 1;
+  transition: opacity 0.9s;
+  background: black;
+  opacity: 0;
+}
+
+/* versi desktop */
+@media (min-width: 992px) {
+
+
+}
