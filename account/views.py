@@ -4,10 +4,8 @@ from django.contrib import messages
 from .forms import UserModelForm, UserProfileModelForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
-@csrf_protect
 def user_login(request):
     if request.method == 'POST':
 
