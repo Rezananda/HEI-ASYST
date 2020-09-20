@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('attendance.urls')),
-    path('sw.js', (TemplateView.as_view(template_name="account/sw.js", content_type='application/javascript', )), name='sw.js'),
+    path('', include('pwa.urls')),
+    # path('sw.js', (TemplateView.as_view(template_name="account/sw.js", content_type='application/javascript', )), name='sw.js'),
     path('', include('account.urls'))
 ]

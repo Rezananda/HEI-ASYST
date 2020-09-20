@@ -1,6 +1,7 @@
 
 <!doctype html>
 <html lang="en">
+  {% load pwa %}
   <head>
     {% load static %}
     <!-- Required meta tags -->
@@ -19,7 +20,9 @@
     <!-- My CSS -->
     <link rel="stylesheet" href="{% static 'css/auth_style.css'%}" type="text/css">
     
-    <link rel="manifest" href="{% static 'account/manifest.json' %}">
+
+    {% progressive_web_app_meta %}
+    <!-- <link rel="manifest" href="{% static 'account/manifest.json' %}"> -->
     
     <!-- Title Start -->
     <title>{% block title %}{% endblock %}</title>
@@ -53,17 +56,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').then(function(registration) {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', function() {
+      //     navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      //       // Registration was successful
+      //       console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      //     }, function(err) {
+      //       // registration failed :(
+      //       console.log('ServiceWorker registration failed: ', err);
+      //     });
+      //   });
+      // }
     </script>
 
   </body>

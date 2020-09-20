@@ -9,32 +9,44 @@
       {% csrf_token %}
         <div style="height: 370px; overflow: auto;">
           <p> Isi Self Assesment dulu yuk <a href="https://selfass.bca.co.id/" role="button" target="_blank"><b>disini</b></a></p>
-          <div class="form-group" onchange="handleSelect()">
-            <label for="name">Apakah kamu hari ini hadir?</label>
-            <select class="form-control" id="attend" name="attend" required>
-                <option name="attend">{{ data.attend }}</option>
+          
+          <div class="form-group">
+            <label for="selfassstatus">Status selfass kamu</label>
+            <select class="form-control" id="attend" name="selfassstatus" required>
+                <option name="attend">{{ data.selfassstatus }}</option>
+                <optgroup label="Pilihan">
+                  <option value="Resiko Kecil">Resiko Kecil</option>
+                  <option value="Resiko Sedang">Resiko Sedang</option>
+                  <option value="Resiko Besar">Resiko Besar</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="attendance">Apakah kamu hari ini hadir?</label>
+            <select class="form-control" id="attendance" name="attendance" required>
+                <option name="attendance">{{ data.attendance }}</option>
                 <optgroup label="Pilihan">
                 <option value="Hadir">Hadir</option>
                 <option value="Tidak Hadir">Tidak Hadir</option>
             </select>
           </div>
 
-          <div class="form-group" id="reasonAttend" onchange="handleSelect()">
-            <label for="name">Mengapa kamu tidak hadir?</label>
-            <select class="form-control" id="reasonAttends" name="reasonAttends" required>
-                <option name="attend">{{ data.reasonAttends }}</option>
+          <div class="form-group" id="reasonAttend">
+            <label for="reasonNotPresent">Mengapa kamu tidak hadir?</label>
+            <select class="form-control" id="reasonNotPresent" name="reasonNotPresent" required>
+                <option name="attend">{{ data.reasonNotPresent }}</option>
                 <optgroup label="Pilihan">
                 <option>Cuti</option>
                 <option>Training</option>
             </select>
           </div>
 
-          <div class="form-group" id="otherAttend" style="display: none;" onchange="handleSelect()">
-            <label for="initial">Alasan tidak hadir</label>
-            <input type="form" class="form-control" id="otherAttend" value="{{ data.otherAttend }}"  name="otherAttend" placeholder="Alasan tidak hadir" required>
+          <div class="form-group" id="otherAttend">
+            <label for="otherNotPresent">Alasan tidak hadir</label>
+            <input type="form" class="form-control" id="otherAttend" value="{{ data.otherNotPresent }}"  name="otherNotPresent" placeholder="Alasan tidak hadir" required>
           </div>
           
-          <div class="form-group" onchange="handleSelectSick()">
+          <div class="form-group">
             <label for="name">Kondisimu saat ini apa?</label>
             <select class="form-control" id="condition" name="condition" required>
                 <option name="attend">{{ data.condition }}</option>
@@ -44,7 +56,7 @@
             </select>
           </div>
           
-          <div class="form-group" id="sickChoice" style="display: none;" onchange="handleSelectSick()">
+          <div class="form-group" id="sickChoice">
             <label for="name">Kamu sakit apa?</label>
             <select class="form-control" id="sickChoices" name="sickChoices" required>
                 <option name="attend">{{ data.sickChoices }}</option>
@@ -54,13 +66,13 @@
             </select>
           </div>
           
-          <div class="form-group" id="otherSick" style="display: none;" onchange="handleSelectSick()">
+          <div class="form-group" id="otherSick">
             <label for="initial">Alasan sakit lainnya</label>
             <input type="form" class="form-control" id="sick" value="{{ data.otherSicks }}" name="otherSicks" placeholder="Alasan sakit lainnya" required>
           </div>
           
 
-          <div class="form-group" id="work_statuss" onchange="handleSelectWFO()">
+          <div class="form-group" id="work_statuss">
             <label for="name">Kamu WFH / WFO?</label>
             <select class="form-control" id="work_status" name="work_status" required>
                 <option name="attend">{{ data.work_status }}</option>
@@ -70,10 +82,10 @@
             </select>
           </div>
 
-          <div class="form-group" id="wfoStatus" style="display: none;" onchange="handleSelectWFO()">
-            <label for="initial">Jadwal WFO jam berapa?</label>
-            <select class="form-control" id="work_description" name="work_description" required>
-                <option name="attend">{{ data.work_description }}</option>
+          <div class="form-group" id="wfoStatus">
+            <label for="wfo_description">Jadwal WFO jam berapa?</label>
+            <select class="form-control" id="wfo_description" name="wfo_description" required>
+                <option name="attend">{{ data.wfo_description }}</option>
                 <optgroup label="Pilihan">
                 <option>07.30 - 16.30</option>
                 <option>08.30 - 17.30</option>

@@ -19,7 +19,8 @@ def index(request):
         getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
 
         def checkAttend():
-            getdate = datetime.now().strftime('%Y-%m-%d')
+            getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+            # getdate = datetime.now().strftime('%Y-%m-%d')
             # print(getdate)
             # print(getLatesAttend.created_at)
             if getdate in str(getLatesAttend.created_at):
@@ -56,7 +57,7 @@ def index(request):
 
 @login_required()
 def all_attendance(request):
-    getdate = datetime.now().strftime('%Y-%m-%d')
+    getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
     getAllData = UserAttendance.objects.filter(created_at__date = getdate)
 
     getFullName = []
@@ -88,8 +89,6 @@ def my_attendance(request):
     kehadiran.append(getHadirCondition)
     kehadiran.append(getTidakHadirCondition)
 
-    print(kehadiran)
-
     context = {
         'full_name' : request.session['full_name'],
         'attend' : kehadiran,
@@ -102,7 +101,7 @@ def my_attendance(request):
 def my_attendance_list(request):
     getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
 
-    getListAttendance = UserAttendance.objects.filter(authors_id = getUserId.user_id).all().order_by('created_at')
+    getListAttendance = UserAttendance.objects.filter(authors_id = getUserId.user_id).all().order_by('-created_at')
 
     context = {
         'full_name' : request.session['full_name'],
@@ -146,14 +145,15 @@ def my_attendance_edit(request, id):
         
         attendance = UserAttendance.objects.get(id = id)
 
-        attendance.attend = request.POST.get('attend')
-        attendance.reasonAttends = request.POST.get('reasonAttends')
-        attendance.otherAttend = request.POST.get('otherAttend')
+        attendance.selfassstatus = request.POST.get('selfassstatus')
+        attendance.attendance = request.POST.get('attendance')
+        attendance.reasonNotPresent = request.POST.get('reasonNotPresent')
+        attendance.otherNotPresent = request.POST.get('otherNotPresent')
         attendance.condition = request.POST.get('condition')
         attendance.sickChoices = request.POST.get('sickChoices')
         attendance.otherSicks = request.POST.get('otherSicks')
         attendance.work_status = request.POST.get('work_status')
-        attendance.work_description = request.POST.get('work_description')
+        attendance.wfo_description = request.POST.get('work_description')
         attendance.authors = request.user
         attendance.save()
 
@@ -216,14 +216,15 @@ def add_edit_attend(request):
     if request.method == 'POST':
         attendance = UserAttendance()
 
-        attendance.attend = request.POST.get('attend')
-        attendance.reasonAttends = request.POST.get('reasonAttends')
-        attendance.otherAttend = request.POST.get('otherAttend')
+        attendance.selfassstatus = request.POST.get('selfassstatus')
+        attendance.attendance = request.POST.get('attendance')
+        attendance.reasonNotPresent = request.POST.get('reasonNotPresent')
+        attendance.otherNotPresent = request.POST.get('otherNotPresent')
         attendance.condition = request.POST.get('condition')
         attendance.sickChoices = request.POST.get('sickChoices')
         attendance.otherSicks = request.POST.get('otherSicks')
         attendance.work_status = request.POST.get('work_status')
-        attendance.work_description = request.POST.get('work_description')
+        attendance.wfo_description = request.POST.get('wfo_description')
         attendance.authors = request.user
         attendance.save()
 
@@ -251,14 +252,15 @@ def add_same_attend(request):
 
     attendance = UserAttendance()
 
-    attendance.attend = getLatesAttend.attend
-    attendance.reasonAttends = getLatesAttend.reasonAttends
-    attendance.otherAttend = getLatesAttend.otherAttend
+    attendance.selfassstatus = getLatesAttend.selfassstatus
+    attendance.attendance = getLatesAttend.attendance
+    attendance.reasonNotPresent = getLatesAttend.reasonNotPresent
+    attendance.otherNotPresent = getLatesAttend.otherNotPresent
     attendance.condition = getLatesAttend.condition
     attendance.sickChoices = getLatesAttend.sickChoices
     attendance.otherSicks = getLatesAttend.otherSicks
     attendance.work_status = getLatesAttend.work_status
-    attendance.work_description = getLatesAttend.work_description
+    attendance.wfo_description = getLatesAttend.wfo_description
     attendance.authors = request.user
 
     attendance.save()
@@ -270,7 +272,8 @@ def add_same_attend(request):
 def manager_page(request):
 
     getDate = request.GET.get('date', '')
-    getdateNow = datetime.now().strftime('%Y-%m-%d')
+    # getdateNow = datetime.now().strftime('%Y-%m-%d')
+    getdateNow = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
 
     if getDate == 'now':
         
@@ -299,7 +302,7 @@ def manager_page(request):
             getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
             getFullNameSakit.append(getFullNameByAuthor.full_name)
 
-        getAllData = UserAttendance.objects.filter(created_at__date = getdateNow)
+        getAllData = UserAttendance.objects.filter(created_at__date = getdateNow).order_by('-created_at')
 
         context = {
             'attend' : kehadiran,
@@ -337,7 +340,7 @@ def manager_page(request):
             getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
             getFullNameSakit.append(getFullNameByAuthor.full_name)
 
-        getAllData = UserAttendance.objects.all()
+        getAllData = UserAttendance.objects.all().order_by('-created_at')
 
         context = {
             'attend' : kehadiran,
@@ -375,10 +378,8 @@ def manager_page(request):
             getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
             getFullNameSakit.append(getFullNameByAuthor.full_name)
 
-        getAllData = UserAttendance.objects.filter(created_at__date = getDate)
-
-        print(getAllData)
-
+        getAllData = UserAttendance.objects.filter(created_at__date = getDate).order_by('-created_at')
+        
         context = {
             'attend' : kehadiran,
             'condition' : kondisi,

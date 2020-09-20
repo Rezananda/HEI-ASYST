@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'attendance',
     'account',
     'crispy_forms',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -133,14 +134,54 @@ STATIC_URL = '/static/'
 
 STATICFILES_ROOT = os.path.join(BASE_DIR, "static")
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
 
-# LOGIN_URL = "/login"
+LOGIN_URL = "/login"
 
-# LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 django_heroku.settings(locals())
 
-# X_FRAME_OPTIONS = 'SAMEORIGIN'
+PWA_APP_NAME = 'Health Information & Attendance System'
+PWA_APP_DESCRIPTION = "Health Information & Attendance System"
+PWA_APP_THEME_COLOR = '#007bff'
+PWA_APP_BACKGROUND_COLOR = '#007bff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/login'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/login'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/account/icons/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        "src": "/static/account/icons/icon-512x512.png",
+        "sizes": "512x512"
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/account/icons/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        "src": "/static/account/icons/icon-512x512.png",
+        "sizes": "512x512"
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/account/icons/icon-512x512.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
