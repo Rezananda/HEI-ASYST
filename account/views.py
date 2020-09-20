@@ -68,6 +68,3 @@ def register(request):
             'profile_form' : profile_form
         }
         return render(request, 'account/register.html', context)
-
-def offline(request):
-    return render(request, 'account/offline.html')

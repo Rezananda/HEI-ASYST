@@ -1,28 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from attendance.models import UserAttendance
 from account.models import UserProfile
-from datetime import datetime
-from django.utils import timezone, dateformat
+from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.forms.models import model_to_dict
+from django.http import JsonResponse
 import json
 
 # Create your views here.
 @login_required
 def index(request):
     getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
-    # print(dateformat.format(timezone.now(), 'Y-m-d H:i:s'))
     try:
         getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
 
         def checkAttend():
             getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
-            # getdate = datetime.now().strftime('%Y-%m-%d')
-            # print(getdate)
-            # print(getLatesAttend.created_at)
             if getdate in str(getLatesAttend.created_at):
                 return 'SUDAH'
             else:
@@ -137,7 +131,6 @@ def my_attendance_detail(request, id):
 
     return JsonResponse({'attendance':data}, status=200)
 
-
 @login_required
 def my_attendance_edit(request, id):
     
@@ -175,8 +168,12 @@ def my_attendance_edit(request, id):
 
 @login_required
 def more(request):
+
+    getUserData = UserProfile.objects.get(full_name = request.session['full_name'])
+    
     context = {
-        'full_name' : request.session['full_name']
+        'full_name' : request.session['full_name'],
+        'user_status' : getUserData
     }
     return render(request, 'attendance/more.html', context)
 
@@ -272,7 +269,6 @@ def add_same_attend(request):
 def manager_page(request):
 
     getDate = request.GET.get('date', '')
-    # getdateNow = datetime.now().strftime('%Y-%m-%d')
     getdateNow = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
 
     if getDate == 'now':
@@ -309,7 +305,8 @@ def manager_page(request):
             'condition' : kondisi,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
-            'datenow' : getdateNow
+            'datenow' : getdateNow,
+            'status_data' : 'DATA HARI INI'
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -347,7 +344,8 @@ def manager_page(request):
             'condition' : kondisi,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
-            'datenow' : getdateNow
+            'datenow' : getdateNow,
+            'status_data' : 'SEMUA DATA'
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -385,7 +383,8 @@ def manager_page(request):
             'condition' : kondisi,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
-            'datenow' : getdateNow
+            'datenow' : getdateNow,
+            'status_data' : 'DATA ' + getDate
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -393,8 +392,6 @@ def manager_page(request):
 def manager_member_detail(request, id):
 
     getAttendanceDetail = UserAttendance.objects.get(id = id)
-
-    print(getAttendanceDetail.selfassstatus)
 
     getDate = timezone.localtime(getAttendanceDetail.created_at)
     
