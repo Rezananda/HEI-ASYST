@@ -161,24 +161,20 @@ PWA_APP_ICONS = [
     {
         'src': '/static/account/icons/icon-192x192.png',
         'sizes': '192x192',
-        'type": "image/jpeg'
     },
     {
         'src': '/static/account/icons/icon-512x512.png',
         'sizes': '512x512',
-        'type": "image/jpeg'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': '/static/account/icons/icon-192x192.png',
         'sizes': '192x192',
-        'type": "image/jpeg'
     },
     {
         'src': '/static/account/icons/icon-512x512.png',
         'sizes': '512x512',
-        'type": "image/jpeg'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
