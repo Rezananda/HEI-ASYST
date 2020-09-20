@@ -10,8 +10,8 @@ HEI-ASYST
   <div style="height: 370px; overflow: auto;">
   
     <div class="form-group">
-      <label for="selfass">Self Assesment Kamu</label>
-      <select style="border-radius: 25px;" class="form-control" id="selfass" name="selfass" required>
+      <label for="selfassstatus">Self Assesment Kamu</label>
+      <select style="border-radius: 25px;" class="form-control" id="selfassstatus" name="selfassstatus" required>
           <option name="attend">{{ data.selfassstatus }}</option>
           <optgroup label="Pilihan">
           <option>Resiko Kecil</option>
@@ -21,8 +21,8 @@ HEI-ASYST
     </div>
 
     <div class="form-group">
-      <label for="name">Apakah kamu hari ini hadir?</label>
-      <select style="border-radius: 25px;" class="form-control" id="attend" name="attend" required>
+      <label for="attendance">Apakah kamu hari ini hadir?</label>
+      <select style="border-radius: 25px;" class="form-control" id="attendance" name="attendance" required>
           <option name="attend">{{ data.attendance }}</option>
           <optgroup label="Pilihan">
           <option value="Hadir">Hadir</option>
@@ -31,8 +31,8 @@ HEI-ASYST
     </div>
 
     <div class="form-group" id="reasonAttend">
-      <label for="name">Mengapa kamu tidak hadir?</label>
-      <select style="border-radius: 25px;" class="form-control" id="reasonAttends" name="reasonAttends" required>
+      <label for="reasonNotPresent">Mengapa kamu tidak hadir?</label>
+      <select style="border-radius: 25px;" class="form-control" id="reasonNotPresent" name="reasonNotPresent" required>
           <option name="attend">{{ data.reasonNotPresent }}</option>
           <optgroup label="Pilihan">
           <option>Cuti</option>
@@ -42,7 +42,7 @@ HEI-ASYST
 
     <div class="form-group" id="otherAttend">
       <label for="initial">Alasan tidak hadir</label>
-      <input style="border-radius: 25px;" type="form" class="form-control" id="otherAttend" value="{{ data.otherNotPresent }}"  name="otherAttend" placeholder="Alasan tidak hadir" required>
+      <input style="border-radius: 25px;" type="form" class="form-control" id="otherNotPresent" value="{{ data.otherNotPresent }}"  name="otherNotPresent" placeholder="Alasan tidak hadir" required>
     </div>
     
     <div class="form-group">
@@ -82,8 +82,8 @@ HEI-ASYST
     </div>
 
     <div class="form-group" id="wfoStatus">
-      <label for="initial">Jadwal WFO jam berapa?</label>
-      <select style="border-radius: 25px;" class="form-control" id="work_description" name="work_description" required>
+      <label for="wfo_description">Jadwal WFO jam berapa?</label>
+      <select style="border-radius: 25px;" class="form-control" id="wfo_description" name="wfo_description" required>
           <option name="attend">{{ data.wfo_description }}</option>
           <optgroup label="Pilihan">
           <option>07.30 - 16.30</option>

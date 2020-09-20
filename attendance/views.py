@@ -153,7 +153,7 @@ def my_attendance_edit(request, id):
         attendance.sickChoices = request.POST.get('sickChoices')
         attendance.otherSicks = request.POST.get('otherSicks')
         attendance.work_status = request.POST.get('work_status')
-        attendance.wfo_description = request.POST.get('work_description')
+        attendance.wfo_description = request.POST.get('wfo_description')
         attendance.authors = request.user
         attendance.save()
 
@@ -379,7 +379,7 @@ def manager_page(request):
             getFullNameSakit.append(getFullNameByAuthor.full_name)
 
         getAllData = UserAttendance.objects.filter(created_at__date = getDate).order_by('-created_at')
-        
+
         context = {
             'attend' : kehadiran,
             'condition' : kondisi,

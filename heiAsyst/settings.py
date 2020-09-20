@@ -148,7 +148,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 django_heroku.settings(locals())
 
-PWA_APP_NAME = 'Health Information & Attendance System'
+PWA_APP_NAME = 'HEI-ASYST'
 PWA_APP_DESCRIPTION = "Health Information & Attendance System"
 PWA_APP_THEME_COLOR = '#007bff'
 PWA_APP_BACKGROUND_COLOR = '#007bff'
