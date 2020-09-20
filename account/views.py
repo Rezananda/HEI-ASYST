@@ -19,7 +19,7 @@ def user_login(request):
             user_status = UserProfile.objects.get(user = user)
             if user_status.is_user or user_status.is_manager == True:
                 request.session['full_name'] = user_status.full_name
-                request.session.set_expiry(0)
+                # request.session.set_expiry(0)
                 login(request, user)
                 return redirect('index')
             else:

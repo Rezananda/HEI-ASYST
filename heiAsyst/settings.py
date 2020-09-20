@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = '#pj%7n4kzac)p6b1_@d172aho4cwoh-2t&07o7kz^!fq149&8='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ['192.168.10.24']
 ALLOWED_HOSTS = ['*']
@@ -148,8 +148,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 django_heroku.settings(locals())
 
-PWA_APP_NAME = 'HEI-ASYST'
-PWA_APP_DESCRIPTION = "Health Information & Attendance System"
+PWA_APP_NAME = 'Health Information & Attendance System'
+PWA_APP_DESCRIPTION = "HEI-ASYST"
 PWA_APP_THEME_COLOR = '#007bff'
 PWA_APP_BACKGROUND_COLOR = '#007bff'
 PWA_APP_DISPLAY = 'standalone'
