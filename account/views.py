@@ -19,7 +19,7 @@ def user_login(request):
                 request.session['full_name'] = user_status.full_name
                 request.session.set_expiry(0)
                 login(request, user)
-                return redirect('user_login')
+                return redirect('index')
             else:
                 messages.info(request, 'Akunmu belum aktif!')
                 return redirect('user_login')
