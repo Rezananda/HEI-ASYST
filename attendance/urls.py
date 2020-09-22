@@ -16,4 +16,7 @@ urlpatterns = [
     path('manager/', views.manager_page, name='manager_page'),
     path('manager/<int:id>/', views.manager_member_detail, name='manager_member_detail'),
     path('logout/', views.user_logout, name='user_logout'),
+    path('admin-page/', views.admin_page, name='admin_page'),
+    path('admin-page/<int:id>/', views.admin_page_detail, name='admin_page_detail'),
+    path('logout/', views.user_logout, name='user_logout'),
 ]

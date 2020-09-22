@@ -414,6 +414,41 @@ def manager_member_detail(request, id):
     return JsonResponse({'attendance':data}, status=200)
 
 @login_required
+def admin_page(request):
+
+    getUserData = UserProfile.objects.all()
+    
+    context = {
+        'data' : getUserData
+    }
+
+    return render(request, 'attendance/admin_page.html', context)
+
+@login_required
+def admin_page_detail(request, id):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+
+        print(id)
+
+        userStatus = UserProfile.objects.get(id = id)
+
+        userStatus.is_user = request.POST.get('is_user').title()
+        userStatus.is_manager = request.POST.get('is_manager').title()
+
+        userStatus.save()
+        return JsonResponse({'attendance':'berhasil'}, status=200)
+    else :
+        getUserData = UserProfile.objects.get(id = id)
+        
+        data = {
+            'is_manager' : getUserData.is_manager,
+            'is_user' : getUserData.is_user,
+        }
+
+        return JsonResponse({'attendance':data}, status=200)
+
+@login_required
 def user_logout(request):
     try:
         del request.session['full_name']

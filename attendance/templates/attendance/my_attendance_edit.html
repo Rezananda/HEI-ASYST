@@ -7,7 +7,7 @@ HEI-ASYST
 {% block content %}
 <form action="/my-attend-list-edit/{{ data.id }}/" method="POST">
   {% csrf_token %}
-  <div style="height: 370px; overflow: auto;">
+  <div style="height: 400px; overflow: auto;">
   
     <div class="form-group">
       <label for="selfassstatus">Self Assesment Kamu</label>
@@ -92,7 +92,7 @@ HEI-ASYST
       </select>
     </div>
 </div>
-<button id="addButton" type="submit" class="btn btn-outline-primary btn-block">Ubah</button>
+<button id="addButton" type="submit" class="btn btn-primary btn-block btn-lg">Simpan</button>
 </form>
 
 {% endblock %}
