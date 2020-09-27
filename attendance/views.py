@@ -141,36 +141,22 @@ def my_attendance_detail(request, id):
 
 @login_required
 def my_attendance_edit(request, id):
+        
+    attendance = UserAttendance.objects.get(id = id)
+
+    attendance.attendance_status = request.POST.get('attendance_status')
+    attendance.selfassstatus = request.POST.get('selfassstatus')
+    attendance.working_location = request.POST.get('working_location')
+    attendance.wfo_time = request.POST.get('wfo_time')
+    attendance.condition = request.POST.get('condition')
+    attendance.sick_reason = request.POST.get('sick_reason')
+    attendance.authors = request.user
     
-    if request.method == 'POST':
-        
-        attendance = UserAttendance.objects.get(id = id)
+    attendance.save()
 
-        attendance.attendance_status = request.POST.get('attendance_status')
-        attendance.selfassstatus = request.POST.get('selfassstatus')
-        attendance.working_location = request.POST.get('working_location')
-        attendance.wfo_time = request.POST.get('wfo_time')
-        attendance.condition = request.POST.get('condition')
-        attendance.sick_reason = request.POST.get('sick_reason')
-        attendance.authors = request.user
-        
-        attendance.save()
+    messages.success(request, 'Berhasil ubah data!')
 
-        messages.success(request, 'Berhasil ubah data!')
-
-        return redirect('my_attendance_edit', id=id)
-
-    elif request.method == 'GET':
-        getAttendanceDetail = UserAttendance.objects.get(id = id)
-
-        context = {
-            'full_name' : request.session['full_name'],
-            'data' : getAttendanceDetail,
-            'url' : 'UBAH DATA',
-            'back_url' : '/my-attend-list'
-        }
-
-        return render(request, 'attendance/my_attendance_edit.html', context)
+    return redirect('my_attendance_list')
 
 @login_required
 def more(request):

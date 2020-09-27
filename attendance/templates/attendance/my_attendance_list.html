@@ -26,8 +26,79 @@ Kehadiran
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="container" style="margin-bottom: 65px; height: 350px; overflow-y: auto;">
-    <div id="something"></div>
+  <div class="container">
+    <form id="form-edit" method="POST">
+      {% csrf_token %}
+        <div class="form-group">
+          <label for="attendance_status">Status Kehadiran</label>
+          <select class="form-control" onclick="handleSelect()" id="attendance_status" name="attendance_status" required disabled>
+            <option>-</option>
+            <option value="WFO">WFO</option>
+            <option value="WFH">WFH</option>
+            <option value="Izin">Izin</option>
+            <option value="Sakit">Sakit</option>
+          </select>
+        </div>
+    
+        <div class="form-group" id="selfassstatuss">
+          <label for="selfassstatus">Hasil Selfass</label>
+          <select class="form-control" id="selfassstatus" name="selfassstatus" required disabled>
+            <option>-</option>
+            <option>Resiko Kecil</option>
+            <option>Resiko Sedang</option>
+            <option>Resiko Besar</option>
+          </select>
+        </div>
+    
+        <div class="form-group" id="working_locations">
+          <label for="working_location">Lokasi WFO</label>
+          <select class="form-control" id="working_location" name="working_location" required disabled>
+            <option>-</option>
+            <option>Wisma Asia</option>
+            <option>Menara BCA</option>
+            <option>Gading Serpong</option>
+            <option>BLI</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="wfo_times">
+          <label for="wfo_time">Waktu WFO</label>
+          <select class="form-control" id="wfo_time" name="wfo_time" required disabled>
+            <option>-</option>
+            <option>07.30 - 16.30</option>
+            <option>08.30 - 17.30</option>
+            <option>09.30 - 18.30</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="conditions">
+          <label for="name">Kesehatan</label>
+          <select class="form-control" id="condition" name="condition" required disabled>
+            <option>-</option>
+            <option value="Sehat">Sehat</option>
+            <option value="Sakit">Sakit</option>
+          </select>
+        </div>
+    
+        <div class="form-group" id="sick_reasons">
+          <label for="sick_reason">Alasan Sakit</label>
+          <input type="form" class="form-control" id="sick_reason" name="sick_reason" required disabled>
+        </div>
+    
+      <!-- <button id="addButtons" type="submit" class="btn btn-primary btn-block btn-lg">Simpan</button> -->
+      <div class="container">
+        <div class="row">
+          <div class="mr-auto">
+            <button type="button" style="width: 150px;" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Ubah Data</button>
+          </div>
+          <div class="ml-auto">
+            <button id="tutup" type="button" style="width: 150px;" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Tutup</button>
+            <button id="simpan" type="submit" style="width: 150px; display: none;" class="btn btn-primary">Simpan</button>
+          </div>
+        </div>
+      </div>
+      <div style="height: 20px;"></div>
+    </form>
   </div>
 </div>
 <div id="backdrop" onclick="slideHide()"></div>
@@ -42,11 +113,12 @@ Kehadiran
     jQuery('#slideup').slideUp(600);
     document.getElementById("backdrop").style.width = "0";
     document.getElementById("backdrop").style.opacity = "0";
-    $("#something").html("");
+    $("#form-edit").removeAttr("action");
   } 
 
   function getStuff(elem) {
     const id = elem;
+    $('#form-edit').attr('action', '/my-attend-list-edit/'+id+'/');
     
     $.ajax({
       url:window.location.pathname + id,
@@ -54,52 +126,96 @@ Kehadiran
       contentType:'application/json; charset=utf-8',
       dataType:'json',
       success:function (result) {
-        $('#something').html(`
-        <div style='margin-top:10px'></div>
-        <table class="table borderless">
-          <tbody>
-            <tr>
-              <td>Status Kehadiran</td>
-              <td>${result.attendance.attendance_status }</td>
-            </tr>
-            <tr>
-              <td>Hasil Selfass</td>
-              <td>${result.attendance.selfassstatus }</td>
-            </tr>
-            <tr>
-              <td>Lokasi WFO</td>
-              <td>${result.attendance.working_location }</td>
-            </tr>
-            <tr>
-              <td>Waktu WFO</td>
-              <td>${result.attendance.wfo_time }</td>
-            </tr>
-            <tr>
-              <td>Status Kesehatan</td>
-              <td>${result.attendance.condition}</td>
-            </tr>
-            <tr>
-              <td>Alasan Sakit</td>
-              <td>${result.attendance.sick_reason}</td>
-            </tr>
-            <tr>
-              <td>Tanggal Isi</td>
-              <td>${result.attendance.date_created}</td>
-            </tr>
-            <tr>
-              <td>Waktu Isi</td>
-              <td>${result.attendance.time_created}</td>
-            </tr>
-          </tbody>
-        </table>
-        <a href="/my-attend-list-edit/${result.attendance.id }"><button style='position:fixed; bottom:0; left:0; right:0; margin:auto; max-width: 90%; margin-bottom:10px; border-radius: 25px'class="btn btn-primary btn-block btn-lg" role="button">Ubah</button></a>
-        `)
+        $('#attendance_status').val(result.attendance.attendance_status);
+        $('#selfassstatus').val(result.attendance.selfassstatus);
+        $('#working_location').val(result.attendance.working_location);
+        $('#wfo_time').val(result.attendance.wfo_time);
+        $('#condition').val(result.attendance.condition);
+        $('#sick_reason').val(result.attendance.sick_reason);
       },
       error: function (response) {
         console.log(response)
       }
     });
   }
+
+  function undesable(param) {
+    if (param == "disabled") {
+      $('#attendance_status').prop("disabled", true);
+      $('#selfassstatus').prop("disabled", true);
+      $('#working_location').prop("disabled", true);
+      $('#wfo_time').prop("disabled", true);
+      $('#condition').prop("disabled", true);
+      $('#sick_reason').prop("disabled", true);
+    } else if (param == "undisabled") {
+      $("#tutup").css("display", "none");
+      $("#simpan").css("display", "block");
+      $('#attendance_status').prop("disabled", false);
+      $('#selfassstatus').prop("disabled", false);
+      $('#working_location').prop("disabled", false);
+      $('#wfo_time').prop("disabled", false);
+      $('#condition').prop("disabled", false);
+      $('#sick_reason').prop("disabled", false);
+    }
+  }
+
+  function handleSelect() {
+    if (document.getElementById("attendance_status").value == "WFO") {
+        document.getElementById("selfassstatuss").style.display = 'block';
+        document.getElementById("working_locations").style.display = 'block';
+        document.getElementById('wfo_times').style.display = 'block';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "WFH") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "Izin") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "Sakit") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+      }
+    }
+
 </script>
 {% endblock %}
 
