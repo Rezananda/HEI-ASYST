@@ -8,18 +8,38 @@ from django.utils import timezone
 
 class UserAttendance(models.Model):
 
+    # selfassstatus = models.CharField(max_length=251, null=False)
+
+    # attendance = models.CharField(max_length=255, null=False)
+    # reasonNotPresent = models.CharField(max_length=255, null=False)
+    # otherNotPresent = models.CharField(max_length=255, null=False)
+
+    # condition = models.CharField(max_length=255, null=False)
+    # sickChoices = models.CharField(max_length=255, null=False)
+    # otherSicks = models.CharField(max_length=255, null=False)
+    
+    # work_status = models.CharField(max_length=255, null=False)
+    # wfo_description = models.CharField(max_length=255, null=False)
+
+    # authors = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+
+    # created_at = models.DateTimeField(auto_now_add=True, null=False)
+
+    # def __str__(self):
+    #     return str(self.authors)
+
+
+    attendance_status = models.CharField(max_length=255, null=False) #WFO/WFH WFO/WFH/izin/Sakit
+
     selfassstatus = models.CharField(max_length=251, null=False)
 
-    attendance = models.CharField(max_length=255, null=False)
-    reasonNotPresent = models.CharField(max_length=255, null=False)
-    otherNotPresent = models.CharField(max_length=255, null=False)
+    working_location = models.CharField(max_length=255, null=False)
 
-    condition = models.CharField(max_length=255, null=False)
-    sickChoices = models.CharField(max_length=255, null=False)
-    otherSicks = models.CharField(max_length=255, null=False)
-    
-    work_status = models.CharField(max_length=255, null=False)
-    wfo_description = models.CharField(max_length=255, null=False)
+    wfo_time = models.CharField(max_length=255, null=False)
+
+    condition = models.CharField(max_length=255, null=False) #WFO/WFH sehat/sakit
+
+    sick_reason = models.CharField(max_length=255, null=False) #WFO/WFH sehat/sakit
 
     authors = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 

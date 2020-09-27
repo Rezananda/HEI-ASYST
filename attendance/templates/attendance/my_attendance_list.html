@@ -6,13 +6,13 @@ Kehadiran
 
 {% block content %}
 
-<table class="table">
+<table class="table table-striped">
   <tbody>
   {% for data in attendance %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
       <td>{{ data.created_at | date:'Y-m-d' }}</td>
-      <td>{{ data.work_status }}</td>
+      <td>{{ data.attendance_status }}</td>
       <td><h5><a onclick="getStuff({{ data.id }}); slideShow()" class="badge badge-primary text-white">Detail</a></h5></td>
     </tr>
     {% endfor %}
@@ -59,20 +59,20 @@ Kehadiran
         <table class="table borderless">
           <tbody>
             <tr>
-              <td>Hasil Selfass</td>
-              <td>${result.attendance.selfass }</td>
-            </tr>
-            <tr>
               <td>Status Kehadiran</td>
-              <td>${result.attendance.attendance }</td>
+              <td>${result.attendance.attendance_status }</td>
             </tr>
             <tr>
-              <td>Alasan Tidak Hadir</td>
-              <td>${result.attendance.reasonNotPresent }</td>
+              <td>Hasil Selfass</td>
+              <td>${result.attendance.selfassstatus }</td>
             </tr>
             <tr>
-              <td>Alasan Tidak Hadir Lainnya</td>
-              <td>${result.attendance.otherNotPresent }</td>
+              <td>Lokasi WFO</td>
+              <td>${result.attendance.working_location }</td>
+            </tr>
+            <tr>
+              <td>Waktu WFO</td>
+              <td>${result.attendance.wfo_time }</td>
             </tr>
             <tr>
               <td>Status Kesehatan</td>
@@ -80,19 +80,7 @@ Kehadiran
             </tr>
             <tr>
               <td>Alasan Sakit</td>
-              <td>${result.attendance.sickChoices}</td>
-            </tr>
-            <tr>
-              <td>Alasan Sakit Lainnya</td>
-              <td>${result.attendance.otherSicks}</td>
-            </tr>
-            <tr>
-              <td>WFO/WFH</td>
-              <td>${result.attendance.work_status}</td>
-            </tr>
-            <tr>
-              <td>Waktu WFO</td>
-              <td>${result.attendance.wfo_description}</td>
+              <td>${result.attendance.sick_reason}</td>
             </tr>
             <tr>
               <td>Tanggal Isi</td>

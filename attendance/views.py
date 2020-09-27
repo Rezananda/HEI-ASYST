@@ -6,6 +6,7 @@ from account.models import UserProfile
 from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 import json
 
 # Create your views here.
@@ -14,7 +15,6 @@ def index(request):
     getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
     try:
         getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
-
         def checkAttend():
             getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
             if getdate in str(getLatesAttend.created_at):
@@ -25,10 +25,13 @@ def index(request):
         context = {
             'attend' : True,
             'full_name' : request.session['full_name'],
-            'date' : getLatesAttend.created_at,
-            'attend' : getLatesAttend.attendance,
+            'attendance_status' : getLatesAttend.attendance_status,
+            'selfassstatus' : getLatesAttend.selfassstatus,
+            'working_location' : getLatesAttend.working_location,
+            'wfo_time' : getLatesAttend.wfo_time,
             'condition' : getLatesAttend.condition,
-            'work_status' : getLatesAttend.work_status,
+            'sick_reason' : getLatesAttend.sick_reason,
+            'date' : getLatesAttend.created_at,
             'status_attend' : checkAttend()
         }
 
@@ -57,7 +60,14 @@ def all_attendance(request):
     getFullName = []
     for i in getAllData:
         getUserId = UserProfile.objects.get(user = i.authors)
-        getFullName.append(getUserId.full_name)
+        getSick = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Sakit')
+        getIzin = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin')
+        if getSick:
+            getFullName.append(getUserId.full_name + '(Sakit)')
+        elif getIzin:
+            getFullName.append(getUserId.full_name + '(Izin)')
+        else:
+            getFullName.append(getUserId.full_name)
 
     context = {
         'data' : getFullName,
@@ -76,12 +86,14 @@ def my_attendance(request):
     kondisi.append(getSehatCondition)
     kondisi.append(getSakitCondition)
 
-    getHadirCondition = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance = 'Hadir').count()
-    getTidakHadirCondition = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance = 'Tidak Hadir').count()
+    getWfoCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').count()
+    getWfhCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFH').count()
+    getSakitCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Sakit').count()
+    getIzinCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin').count()
 
     kehadiran = []
-    kehadiran.append(getHadirCondition)
-    kehadiran.append(getTidakHadirCondition)
+    kehadiran.append(getWfoCount+getWfhCount)
+    kehadiran.append(getSakitCount+getIzinCount)
 
     context = {
         'full_name' : request.session['full_name'],
@@ -89,7 +101,7 @@ def my_attendance(request):
         'condition' : kondisi
     }
 
-    return render(request, 'attendance/my_attendance.html', context)
+    return JsonResponse({'attendance':context}, status=200)
 
 @login_required
 def my_attendance_list(request):
@@ -114,18 +126,14 @@ def my_attendance_detail(request, id):
     getDate = timezone.localtime(getAttendanceDetail.created_at)
 
     data = {
-        'selfass' : getAttendanceDetail.selfassstatus,
-        'attendance' : getAttendanceDetail.attendance,
-        'reasonNotPresent' : getAttendanceDetail.reasonNotPresent,
-        'otherNotPresent' : getAttendanceDetail.otherNotPresent,
+        'attendance_status' : getAttendanceDetail.attendance_status,
+        'selfassstatus' : getAttendanceDetail.selfassstatus,
+        'working_location' : getAttendanceDetail.working_location,
+        'wfo_time' : getAttendanceDetail.wfo_time,
         'condition' : getAttendanceDetail.condition,
-        'sickChoices' : getAttendanceDetail.sickChoices,
-        'otherSicks' : getAttendanceDetail.otherSicks,
-        'work_status' : getAttendanceDetail.work_status,
-        'wfo_description' : getAttendanceDetail.wfo_description,
+        'sick_reason' : getAttendanceDetail.sick_reason,
         'date_created' : getDate.strftime("%d-%m-%Y"),
         'time_created' : getDate.strftime("%H:%M"),
-        
         'id' : getAttendanceDetail.id
     }
 
@@ -138,16 +146,14 @@ def my_attendance_edit(request, id):
         
         attendance = UserAttendance.objects.get(id = id)
 
+        attendance.attendance_status = request.POST.get('attendance_status')
         attendance.selfassstatus = request.POST.get('selfassstatus')
-        attendance.attendance = request.POST.get('attendance')
-        attendance.reasonNotPresent = request.POST.get('reasonNotPresent')
-        attendance.otherNotPresent = request.POST.get('otherNotPresent')
+        attendance.working_location = request.POST.get('working_location')
+        attendance.wfo_time = request.POST.get('wfo_time')
         attendance.condition = request.POST.get('condition')
-        attendance.sickChoices = request.POST.get('sickChoices')
-        attendance.otherSicks = request.POST.get('otherSicks')
-        attendance.work_status = request.POST.get('work_status')
-        attendance.wfo_description = request.POST.get('wfo_description')
+        attendance.sick_reason = request.POST.get('sick_reason')
         attendance.authors = request.user
+        
         attendance.save()
 
         messages.success(request, 'Berhasil ubah data!')
@@ -180,90 +186,75 @@ def more(request):
 @login_required
 def add_attend(request):
 
-    if request.method == 'POST':
-
-        attendance = UserAttendance()
-
-        attendance.selfassstatus = request.POST.get('selfass')
-        attendance.attendance = request.POST.get('attend')
-        attendance.reasonNotPresent = request.POST.get('reasonAttends')
-        attendance.otherNotPresent = request.POST.get('otherAttend')
-        attendance.condition = request.POST.get('condition')
-        attendance.sickChoices = request.POST.get('sickChoices')
-        attendance.otherSicks = request.POST.get('otherSicks')
-        attendance.work_status = request.POST.get('work_status')
-        attendance.wfo_description = request.POST.get('work_description')
-        attendance.authors = request.user
-
-        attendance.save()
-
-        messages.success(request, 'Berhasil tambah data!')
-        return redirect('all_attendance')
-    else:
-
-        context = {
-            'url' : 'TAMBAH DATA',
-            'back_url' : '/'
-        }
-
-        return render(request, 'attendance/add_attend.html', context)
-
-@login_required
-def add_edit_attend(request):
-    if request.method == 'POST':
-        attendance = UserAttendance()
-
-        attendance.selfassstatus = request.POST.get('selfassstatus')
-        attendance.attendance = request.POST.get('attendance')
-        attendance.reasonNotPresent = request.POST.get('reasonNotPresent')
-        attendance.otherNotPresent = request.POST.get('otherNotPresent')
-        attendance.condition = request.POST.get('condition')
-        attendance.sickChoices = request.POST.get('sickChoices')
-        attendance.otherSicks = request.POST.get('otherSicks')
-        attendance.work_status = request.POST.get('work_status')
-        attendance.wfo_description = request.POST.get('wfo_description')
-        attendance.authors = request.user
-        attendance.save()
-
-        messages.success(request, 'Berhasil tambah data!')
-        return redirect('all_attendance')
-
-    else:
-        getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
-        getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
-
-        context = {
-            'data' : getLatesAttend,
-            'full_name' : request.session['full_name'],
-            'url' : 'TAMBAH DATA',
-            'back_url' : '/'
-        }
-
-        return render(request, 'attendance/add_edit_attend.html', context)
-
-@login_required
-def add_same_attend(request):
-
-    getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
-    getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
-
     attendance = UserAttendance()
 
-    attendance.selfassstatus = getLatesAttend.selfassstatus
-    attendance.attendance = getLatesAttend.attendance
-    attendance.reasonNotPresent = getLatesAttend.reasonNotPresent
-    attendance.otherNotPresent = getLatesAttend.otherNotPresent
-    attendance.condition = getLatesAttend.condition
-    attendance.sickChoices = getLatesAttend.sickChoices
-    attendance.otherSicks = getLatesAttend.otherSicks
-    attendance.work_status = getLatesAttend.work_status
-    attendance.wfo_description = getLatesAttend.wfo_description
+    attendance.attendance_status = request.POST.get('attendance_status')
+    attendance.selfassstatus = request.POST.get('selfassstatus')
+    attendance.working_location = request.POST.get('working_location')
+    attendance.wfo_time = request.POST.get('wfo_time')
+    attendance.condition = request.POST.get('condition')
+    attendance.sick_reason = request.POST.get('sick_reason')
     attendance.authors = request.user
 
     attendance.save()
 
     messages.success(request, 'Berhasil tambah data!')
     return redirect('all_attendance')
+
+@login_required
+def add_edit_attend_post(request):
+    if request.method == 'POST':
+        attendance = UserAttendance()
+
+        attendance.attendance_status = request.POST.get('attendance_status')
+        attendance.selfassstatus = request.POST.get('selfassstatus')
+        attendance.working_location = request.POST.get('working_location')
+        attendance.wfo_time = request.POST.get('wfo_time')
+        attendance.condition = request.POST.get('condition')
+        attendance.sick_reason = request.POST.get('sick_reason')
+        attendance.authors = request.user
+
+        attendance.save()
+
+        messages.success(request, 'Berhasil tambah data!')
+        return redirect('all_attendance')
+
+    else:
+        getStatus = request.GET.get('status', '')
+        try:
+            if getStatus == 'WFO':
+                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
+                getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').latest('id')
+
+                context = {
+                    'attendance_status' : getLatesAttend.attendance_status,
+                    'selfassstatus' : getLatesAttend.selfassstatus,
+                    'working_location' : getLatesAttend.working_location,
+                    'wfo_time' : getLatesAttend.wfo_time,
+                    'condition' : getLatesAttend.condition,
+                    'sick_reason' : getLatesAttend.sick_reason,
+                }
+                return JsonResponse({'attendance':context}, status=200)
+            
+            elif getStatus == 'WFH':
+                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
+                getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFH').latest('id')
+
+                context = {
+                    'attendance_status' : getLatesAttend.attendance_status,
+                    'selfassstatus' : getLatesAttend.selfassstatus,
+                    'working_location' : getLatesAttend.working_location,
+                    'wfo_time' : getLatesAttend.wfo_time,
+                    'condition' : getLatesAttend.condition,
+                    'sick_reason' : getLatesAttend.sick_reason,
+                }
+                return JsonResponse({'attendance':context}, status=200)
+            
+        except UserAttendance.DoesNotExist:
+            context = {
+                'not_exist' : 'Data belum ada :( , Kamu dapat menambah data baru pada tombol "Manual"'
+            }
+            return JsonResponse({'attendance':context}, status=200)
 
 @login_required()
 def manager_page(request):
@@ -272,26 +263,25 @@ def manager_page(request):
     getdateNow = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
 
     if getDate == 'now':
-        
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getdateNow).count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getdateNow).count()
 
         getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getdateNow).count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getdateNow).count()
+        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow).count()
     
         kondisi = []
 
         kondisi.append(getSehatCondition)
         kondisi.append(getSakitCondition)
 
-        getHadirCondition = UserAttendance.objects.filter(attendance = 'Hadir', created_at__date = getdateNow).count()
-        getTidakHadirCondition = UserAttendance.objects.filter(attendance = 'Tidak Hadir', created_at__date = getdateNow).count()
+        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getdateNow).count()
+        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getdateNow).count()
+        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow).count()
+        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getdateNow).count()
 
         kehadiran = []
-        kehadiran.append(getHadirCondition)
-        kehadiran.append(getTidakHadirCondition)
+        kehadiran.append(getWfoCount+getWfhCount)
+        kehadiran.append(getSakitCount+getIzinCount)
         
-        getAuthor = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getdateNow)
+        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
     
         getFullNameSakit = []
         for i in getAuthor:
@@ -313,24 +303,23 @@ def manager_page(request):
     elif getDate == 'all':
 
         getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat').count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit').count()
-
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat').count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit').count()
+        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit').count()
     
         kondisi = []
 
         kondisi.append(getSehatCondition)
         kondisi.append(getSakitCondition)
 
-        getHadirCondition = UserAttendance.objects.filter(attendance = 'Hadir').count()
-        getTidakHadirCondition = UserAttendance.objects.filter(attendance = 'Tidak Hadir').count()
+        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO').count()
+        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH').count()
+        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit').count()
+        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin').count()
 
         kehadiran = []
-        kehadiran.append(getHadirCondition)
-        kehadiran.append(getTidakHadirCondition)
+        kehadiran.append(getWfoCount+getWfhCount)
+        kehadiran.append(getSakitCount+getIzinCount)
         
-        getAuthor = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getdateNow)
+        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
     
         getFullNameSakit = []
         for i in getAuthor:
@@ -352,24 +341,23 @@ def manager_page(request):
     else:
 
         getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getDate).count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getDate).count()
-
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getDate).count()
-        getSakitCondition = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getDate).count()
+        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getDate).count()
     
         kondisi = []
 
         kondisi.append(getSehatCondition)
         kondisi.append(getSakitCondition)
 
-        getHadirCondition = UserAttendance.objects.filter(attendance = 'Hadir', created_at__date = getDate).count()
-        getTidakHadirCondition = UserAttendance.objects.filter(attendance = 'Tidak Hadir', created_at__date = getDate).count()
+        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getDate).count()
+        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getDate).count()
+        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getDate).count()
+        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getDate).count()
 
         kehadiran = []
-        kehadiran.append(getHadirCondition)
-        kehadiran.append(getTidakHadirCondition)
+        kehadiran.append(getWfoCount+getWfhCount)
+        kehadiran.append(getSakitCount+getIzinCount)
         
-        getAuthor = UserAttendance.objects.filter(condition = 'Sakit', created_at__date = getdateNow)
+        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
     
         getFullNameSakit = []
         for i in getAuthor:
@@ -394,20 +382,19 @@ def manager_member_detail(request, id):
     getAttendanceDetail = UserAttendance.objects.get(id = id)
 
     getDate = timezone.localtime(getAttendanceDetail.created_at)
-    
+
+    getFullNameByAuthor = UserProfile.objects.get(user = getAttendanceDetail.authors)
+
     data = {
-        'selfass' : getAttendanceDetail.selfassstatus,
-        'attendance' : getAttendanceDetail.attendance,
-        'reasonNotPresent' : getAttendanceDetail.reasonNotPresent,
-        'otherNotPresent' : getAttendanceDetail.otherNotPresent,
+        'full_name' : getFullNameByAuthor.full_name,
+        'attendance_status' : getAttendanceDetail.attendance_status,
+        'selfassstatus' : getAttendanceDetail.selfassstatus,
+        'working_location' : getAttendanceDetail.working_location,
+        'wfo_time' : getAttendanceDetail.wfo_time,
         'condition' : getAttendanceDetail.condition,
-        'sickChoices' : getAttendanceDetail.sickChoices,
-        'otherSicks' : getAttendanceDetail.otherSicks,
-        'work_status' : getAttendanceDetail.work_status,
-        'wfo_description' : getAttendanceDetail.wfo_description,
+        'sick_reason' : getAttendanceDetail.sick_reason,
         'date_created' : getDate.strftime("%d-%m-%Y"),
         'time_created' : getDate.strftime("%H:%M"),
-        
         'id' : getAttendanceDetail.id
     }
 
@@ -429,8 +416,6 @@ def admin_page_detail(request, id):
     if request.method == 'POST':
         id = request.POST.get('id')
 
-        print(id)
-
         userStatus = UserProfile.objects.get(id = id)
 
         userStatus.is_user = request.POST.get('is_user').title()
@@ -447,6 +432,24 @@ def admin_page_detail(request, id):
         }
 
         return JsonResponse({'attendance':data}, status=200)
+
+@login_required
+def admin_delete_member(request, id):
+
+    users = UserProfile.objects.get(id = id)
+
+    UserProfile.objects.get(id = id).delete()
+    User.objects.get(username = users.user).delete()
+    
+    try:
+        UserAttendance.objects.get(authors__username = users.user).delete()
+    except UserAttendance.DoesNotExist:
+        pass
+
+    messages.success(request, 'Berhasil hapus data!')
+
+    return redirect('admin_page')
+
 
 @login_required
 def user_logout(request):

@@ -26,96 +26,91 @@
     <!-- Title End -->
   </head>
   <body>
-    
+    <h3 class="text-resolution">Tidak ada dalam versi Desktop :(</h3>
+    <div class="body">
     <!-- Navbar Start -->              
-    <nav class="navbar navbar-dark bg-primary">
-        <a href="/more">
-            <i class="material-icons" style="color: white; font-size: 30px;">arrow_back</i>
-          </a>
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/logout">Keluar</a>
-          </li>
-        </ul>
-    </nav>
+      <nav class="navbar navbar-dark bg-primary">
+          <a href="/more">
+              <i class="material-icons" style="color: white; font-size: 30px;">arrow_back</i>
+            </a>
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/logout">Keluar</a>
+            </li>
+          </ul>
+      </nav>
 
-    <div class="jumbotron jumbotron-fluid bg-primary" style="height: 25px; border-bottom-left-radius: 45px 30px; border-bottom-right-radius: 45px 30px;">
-        <h5 class="text-center text-white" style="margin-top: -25px;">DATA AKUN</h5>
-    </div>
-
-    <!-- Navbar End -->
-
-
-    <!-- Body -->
-
-    <div id="alert"></div>
-
-    <div class="container">
-      <div class="card" style="border-radius: 20px;">
-          <div class="card-body">
-          <h5 class="card-title text-primary text-center"></h5>
-          <div>
-            <table class="table table-striped">
-              <tbody>
-                {% for i in data %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ i.full_name }}</td>
-                    <td><h5><a onclick="getMember({{ i.id }}); slideShows()" class="badge badge-primary text-white">Detail</a></h5></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-          </div>
-          </div>
-      </div>
-    </div>
-
-    <div id="slideups" class="panel">
-      <div class="modal-header">
-        <h5 class="modal-title">DETAIL</h5>
-        <button onclick="slideHides()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="form-member">
-        <div class="d-flex justify-content-center">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="is_manager" id="is-manager"  >
-            <label class="form-check-label" for="defaultCheck1">
-              Is Manager
-            </label>
-          </div>
-          &nbsp;
-          &nbsp;
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="is_user" value="" id="is-user">
-            <label class="form-check-label" for="defaultCheck2">
-              Is User
-            </label>
-          </div>
+      <div class="jumbotron jumbotron-fluid bg-primary jumbotron-add">
+        <div class="container lead">
+          <h4 class="text-white"><b>DATA AKUN</b></h4>
         </div>
-        <br>
-        <div class="row d-flex justify-content-center">
-          <li style="display: inline;">
-            <button style="width:150px; border-radius: 30px;" class="btn btn-outline-primary btn-block btn-lg">Hapus</button>
-          </li>
+      </div>
+
+      <div id="alert"></div>
+
+      <div class="container">
+        <div class="card" style="border-radius: 20px;">
+          {% include 'attendance/message.html' %}
+            <div class="card-body">
+            <h5 class="card-title text-primary text-center"></h5>
+            <div>
+              <table class="table table-striped">
+                <tbody>
+                  {% for i in data %}
+                  <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ i.full_name }}</td>
+                      <td><h5><a onclick="getMember({{ i.id }}); slideShows()" class="badge badge-primary text-white">Detail</a></h5></td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="slideups" class="panel">
+        <div class="modal-header">
+          <h5 class="modal-title">DETAIL</h5>
+          <button onclick="slideHides()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="form-member">
+          <div class="d-flex justify-content-center">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="is_manager" id="is-manager"  >
+              <label class="form-check-label" for="defaultCheck1">
+                Is Manager
+              </label>
+            </div>
             &nbsp;
             &nbsp;
-          <li style="display: inline;">
-            <button style="width:150px; border-radius: 30px;" id="ubah" class="btn btn-primary btn-block btn-lg">Ubah</button>
-          </li>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="is_user" value="" id="is-user">
+              <label class="form-check-label" for="defaultCheck2">
+                Is User
+              </label>
+            </div>
+          </div>
+          <br>
+          <div class="row d-flex justify-content-center">
+            <li style="display: inline;">
+              <a style="width:150px; border-radius: 30px;" id="hapus" class="btn btn-outline-primary btn-block btn-lg">Hapus</a>
+            </li>
+              &nbsp;
+              &nbsp;
+            <li style="display: inline;">
+              <button style="width:150px; border-radius: 30px;" id="ubah" class="btn btn-primary btn-block btn-lg">Ubah</button>
+            </li>
+          </div>
+          <div style="height: 20px;"></div>
         </div>
-        <div style="height: 20px;"></div>
       </div>
+
+      <div id="backdrops" onclick="slideHides()"></div>
     </div>
-
-    <div id="backdrops" onclick="slideHides()"></div>
-
-    <!-- Jumbotron Start -->
-
-    <!-- Jumbotron End -->
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -139,18 +134,23 @@
                 $(".form-member #is-user").prop('checked', true);
                 $(".form-member #is-user").val(result.is_user);
                 $('#ubah').attr('onclick', 'postEditMember('+id+')');
+                $('#hapus').attr('href', '/admin-page/delete/'+id+'/');
               } else if (result.attendance.is_manager == true) {
                 $(".form-member #is-manager").prop('checked', true);
                 $(".form-member #is-manager").val(result.is_manager);
                 $('#ubah').attr('onclick', 'postEditMember('+id+')');
+                $('#hapus').attr('href', '/admin-page/delete/'+id+'/');
               } else if (result.attendance.is_user == true) {
                 $(".form-member #is-user").prop('checked', true);
                 $(".form-member #is-user").val(result.is_user);
                 $('#ubah').attr('onclick', 'postEditMember('+id+')');
+                $('#hapus').attr('href', '/admin-page/delete/'+id+'/');
               } else if (result.attendance.is_manager == false && result.attendance.is_user == false) {
                 $('#ubah').attr('onclick', 'postEditMember('+id+')');
+                $('#hapus').attr('href', '/admin-page/delete/'+id+'/');
               } else {
                 $('#ubah').attr('onclick', 'postEditMember('+id+')');
+                $('#hapus').attr('href', '/admin-page/delete/'+id+'/');
               }
           },
           error: function (response) {

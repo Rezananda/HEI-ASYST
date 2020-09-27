@@ -19,8 +19,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="{% static 'css/auth_style.css'%}" type="text/css">
-    
+    <link rel="stylesheet" href="{% static 'css/auth_style.css'%}" type="text/css">    
 
     {% progressive_web_app_meta %}
     <!-- <link rel="manifest" href="{% static 'account/manifest.json' %}"> -->
@@ -30,8 +29,8 @@
     <!-- Title End -->
     </head> 
     <body class="bg-primary">
-
-
+    <h3 class="text-resolution">Tidak ada dalam versi Desktop :(</h3>
+    <div class="body">
     <!-- Jumbotron Start -->
     <div class="container lead">
         <a href="/"><img class="icon" src="{% static 'account/icons/icon-512x512.png' %}" width="80px"/></a>
@@ -48,7 +47,7 @@
       {% endblock %}
 
     </div>
-
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -56,19 +55,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-      // if ('serviceWorker' in navigator) {
-      //   window.addEventListener('load', function() {
-      //     navigator.serviceWorker.register('/sw.js').then(function(registration) {
-      //       // Registration was successful
-      //       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      //     }, function(err) {
-      //       // registration failed :(
-      //       console.log('ServiceWorker registration failed: ', err);
-      //     });
-      //   });
-      // }
-    </script>
-
   </body>
 </html>

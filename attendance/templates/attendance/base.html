@@ -23,7 +23,10 @@
     <title>{% block title %}{% endblock %}</title>
     <!-- Title End -->
   </head>
+  
   <body style="overflow: auto;" id="body">
+    <h3 class="text-resolution">Tidak ada dalam versi Desktop :(</h3>
+    <div class="body">
     
     <!-- Navbar Start -->
     <nav class="navbar navbar-dark bg-primary">
@@ -43,7 +46,7 @@
         <div class="text-lead">
           Hai,
           <br>
-          <b>{{ full_name }}</b>
+          <b style="text-transform: capitalize">{{ full_name }}</b>
         </div>
       </div>
     </div>
@@ -70,11 +73,7 @@
           <i class="material-icons nav_icon">view_list</i>
           <span class="nav_text">Kehadiran</span>
         </a>
-        <a href="/my-attend" class="nav_link">
-          <i class="material-icons nav_icon">insert_chart</i>
-          <span class="nav_text">Data Saya</span>
-        </a>
-        <a href="/more" class="nav_link">
+        <a href="/more" id="lainnya" class="nav_link">
           <i class="material-icons nav_icon">more_vert</i>
           <span class="nav_text">Lainnya</span>
         </a>
@@ -82,56 +81,46 @@
     </div>
     <!-- Nabavar Bottom -->
 
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    {% load static %}
-    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
+    <!-- {% load static %}
+    <script src="{% static 'js/main.js' %}" type="text/javascript"></script> -->
 
     <script>
-      let kehadiran = document.getElementById('myCharts').getContext('2d');
-      let myPieCharts  = new Chart(kehadiran, {
-        type: 'pie',
-        data: {
-              labels: ['Hadir', 'Tidak Hadir'],
-              datasets: [{
-                  backgroundColor: ['#007bff','#f8f9fa'],
-                  data: {{ attend }},
-              }]
-          },
-        options: {
-          title: {
-            display : true,
-            text : 'KEHADIRAN',
-            position : 'bottom',
-            fontSize : '18',
-            fontColor : '#0275d8'
+        $(document).ready(function(){
+          if($("a#beranda").attr("href")==window.location.pathname){
+              $("a#beranda").attr("class","nav_link active");
+              $("a#sudahHadir").attr("class","nav_link");
+              $("a#lainnya").attr("class","nav_link");
+            }else if($("a#sudahHadir").attr("href")+"/"==window.location.pathname) {
+              $("a#sudahHadir").attr("class","nav_link active");
+              $("a#beranda").attr("class","nav_link");
+              $("a#lainnya").attr("class","nav_link");
+            }else if($("a#lainnya").attr("href")+"/"==window.location.pathname) {
+              $("a#lainnya").attr("class","nav_link active");
+              $("a#sudahHadir").attr("class","nav_link");
+              $("a#beranda").attr("class","nav_link");
+            }
           }
-        }
-        });
+        );
 
-      let ctxx = document.getElementById('myChartss').getContext('2d');
-      let myPieChart  = new Chart(ctxx, {
-        type: 'pie',
-        data: {
-              labels: ['Sehat', 'Sakit'],
-              datasets: [{
-                  backgroundColor: ['#007bff','#f8f9fa'],
-                  data: {{ condition }}
-              }]
-          },
-        options: {
-          title: {
-            display : true,
-            text : 'KESEHATAN',
-            position : 'bottom',
-            fontSize : '18',
-            fontColor : '#0275d8'
-          }
+        function slideShowData(){
+          jQuery('#slideupdata').slideUp(600);
+          jQuery('#slideupdata').slideDown(600);
+          document.getElementById("backdrop").style.width = "100%";
+          document.getElementById("backdrop").style.opacity = "0.5";    
         }
-        });
+
+        function slideHideData(){
+          jQuery('#slideupdata').slideUp(600);
+          document.getElementById("backdrop").style.width = "0";
+          document.getElementById("backdrop").style.opacity = "0";
+        }
     </script>
   </body>
 </html>

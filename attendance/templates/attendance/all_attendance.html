@@ -14,11 +14,11 @@ Kehadiran
 {% endfor %}
     </textarea>
 </div>
-<div class="container">
-    <button id="chartbutton" type="button" class="btn btn-outline-primary btn-block btn-lg" onclick="myFunction()">Kirim</button>
-</div>
+
+<button style="border-radius: 30px;" type="button" class="btn btn-outline-primary btn-block btn-lg" onclick="myFunction()">Bagikan</button>
+
 <script>
-function myFunction() {
+  function myFunction() {
     var copyText = document.getElementById("myInput").value;
     var encode = encodeURI(copyText)
     window.location='https://api.whatsapp.com/send?phone=&text='+encode

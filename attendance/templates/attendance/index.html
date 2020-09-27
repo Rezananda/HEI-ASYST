@@ -5,6 +5,7 @@ HEI-ASYST
 {% endblock %}
 
 {% block content %}
+
 <h5 class="card-title text-primary">STATUS KEHADIRAN</h5>
 <hr>
 {% if attend %}
@@ -12,9 +13,17 @@ HEI-ASYST
     Hari ini kamu <b><u>{{ status_attend }}</u></b> isi kehadiran
   </div>
   {% load static %}
-  <img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image">
   {% if status_attend == 'SUDAH' %}
-  <button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" onclick="slideShow()">Kehadiran Hari Ini</button>
+  <div class="container">
+    <div class="row">
+      <div class="mr-auto">
+        <button style="width:165px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Data Hari Ini</button>
+      </div>
+      <div class="ml-auto">
+        <button  class="btn btn-outline-primary btn-lg" style="width:165px;" onclick="slideShowData(); getData()">Data Saya</button>
+      </div>
+    </div>
+  </div>
   <div id="slideup" class="panel">
     <div class="modal-header">
       <h5 class="modal-title">DATA KEHADIRAN HARI INI</h5>
@@ -23,110 +32,476 @@ HEI-ASYST
       </button>
     </div>
     <div class="container">
-    <table class="table borderless">
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Tanggal isi</td>
-          <td>{{ date | date:'d-m-Y' }}</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Waktu isi </td>
-          <td>{{ date | date:'H:i' }}</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Status Kehadiran</td>
-          <td>{{ attend }}</td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Status Kesehatan</td>
-          <td>{{ condition }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <table class="table borderless">
+        <tbody>
+          <tr>
+            <td>Tanggal isi</td>
+            <td>{{ date | date:'d-m-Y' }}</td>
+          </tr>
+          <tr>
+            <td>Waktu isi </td>
+            <td>{{ date | date:'H:i' }}</td>
+          </tr>
+          <tr>
+            <td>Status Kehadiran</td>
+            <td>{{ attendance_status }}</td>
+          </tr>
+          <tr>
+            <td>Hasil Selfass</td>
+            <td>{{ selfassstatus }}</td>
+          </tr>
+          <tr>
+            <td>Lokasi WFO</td>
+            <td>{{ working_location }}</td>
+          </tr>
+          <tr>
+            <td>Waktu WFO</td>
+            <td>{{ wfo_time }}</td>
+          </tr>
+          <tr>
+            <td>Kondisi Kesehatan</td>
+            <td>{{ condition }}</td>
+          </tr>
+          <tr>
+            <td>Alasan Sakit</td>
+            <td>{{ sick_reason }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   
   {% elif status_attend == 'BELUM'  %}
-  <button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" onclick="slideShow()">Yuk Isi Kehadiran</button>
+  <div class="container">
+    <div class="row">
+      <div class="mr-auto">
+        <button  class="btn btn-outline-primary btn-lg" style="width:170px;" onclick="slideShowData(); getData()">Data Saya</button>
+      </div>
+      <div class="ml-auto">
+        <button style="width:170px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Isi Kehadiran</button>
+      </div>
+    </div>
+  </div>
   <div id="slideup" class="panel">
     <div class="modal-header">
-      <h5 class="modal-title">DATA KEHADIRAN KEMARIN</h5>
+      <h5 class="modal-title">TAMBAH DATA KEHADIRAN</h5>
       <button onclick="slideHide()" type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="container">
-    <table class="table borderless">
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Tanggal isi</td>
-          <td>{{ date | date:'d-m-Y' }}</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Waktu isi </td>
-          <td>{{ date | date:'H:i' }}</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Status Kehadiran</td>
-          <td>{{ attend }}</td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Status Kesehatan</td>
-          <td>{{ condition }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-    <p class="text-center">Apakah datamu sama seperti data diatas?</p>
-    <div class="d-flex justify-content-center buttonisikehadiran">
-      <a class="btn btn-outline-primary btn-lg" href="/add-edit-attend" style="width:150px; border-radius: 20px;" role="button">Berbeda</a></li>&nbsp;
-      &nbsp;<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" style="width:150px; border-radius: 20px;" onclick="slideHide()" data-target="#exampleModal">Sama</button></li>
-    </div>
-    <div style="height: 30px;"></div>
-  </div>
+    <div class="container" style="height: 500px; overflow: auto; margin-top: 10px;">
+      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        Isi kehadiran berdasarkan data WFO/WFHmu terakhir, atau dapat diisi secara manual.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button id="clicker" style="width: 100px;" class="btn btn-outline-primary clicker" onclick="add_wfo('WFO')">Data WFO</button>&nbsp;
+        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px;" onclick="add_wfo('WFH')">Data WFH</button>&nbsp;
+        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px;" onclick="add_wfo('Manual')">Manual</button>
+      </div>
+      <br>
+      <div id="not_exist" class="container text-center"></div>
+      <div class="container">
+        <form style="display: none;" id="formedit" action="/add-edit-attend-post/" method="POST">
+          {% csrf_token %}
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Perhatian!!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Apakah kamu sebelumnya sudah isi self assesment?
-        </div>
-        <div class="modal-footer">
-          <a class="btn btn-primary" href="/add-edit-attend" role="button">Sudah</a>
-          <a class="btn btn-outline-primary" href="https://selfass.bca.co.id/" target="_blank" role="button">Belum</a>
-        </div>
+          <p> Isi Self Assesment dulu yuk <a href="https://selfass.bca.co.id/" role="button" target="_blank"><b>disini</b></a></p>
+          
+          <div class="form-group">
+            <label for="attendance_status">Status Kehadiran</label>
+            <select class="form-control" onclick="handleSelect()" id="attendance_status" name="attendance_status" required disabled>
+                <option>-</option>
+                <option value="WFO">WFO</option>
+                <option value="WFH">WFH</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+      
+          <div class="form-group" id="selfassstatuss" >
+            <label for="selfassstatus">Hasil Selfass</label>
+            <select class="form-control" id="selfassstatus" name="selfassstatus" required disabled>
+                <option>-</option>
+                <option>Resiko Kecil</option>
+                <option>Resiko Sedang</option>
+                <option>Resiko Besar</option>
+            </select>
+          </div>
+      
+          <div class="form-group" id="working_locations" >
+            <label for="working_location">Lokasi WFO</label>
+            <select class="form-control" id="working_location" name="working_location" required disabled>
+                <option>-</option>
+                <option>Wisma Asia</option>
+                <option>Menara BCA</option>
+                <option>Gading Serpong</option>
+                <option>BLI</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="wfo_times">
+            <label for="wfo_time">Waktu WFO</label>
+            <select class="form-control" id="wfo_time" name="wfo_time" required disabled>
+                <option>-</option>
+                <option>07.30 - 16.30</option>
+                <option>08.30 - 17.30</option>
+                <option>09.30 - 18.30</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="conditions">
+            <label for="name">Kesehatan</label>
+            <select class="form-control" onclick="handleSelect()" id="condition" name="condition" required disabled>
+                <option>-</option>
+                <option value="Sehat">Sehat</option>
+                <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="sick_reasons">
+            <label for="sick_reason">Alasan Sakit</label>
+            <input type="form" class="form-control" id="sick_reason" name="sick_reason" required disabled>
+          </div>
+
+          <p id="text-tanya" class="text-center">Apakah datamu sama seperti data diatas?</p>
+          <div class="container">
+            <div class="row">
+              <div class="mr-auto">
+                <button type="button" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Tidak, Ubah Data</button>
+              </div>
+              <div class="ml-auto">
+                <button type="submit" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Sama, Tambah Data</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 20px;"></div>
+        </form>
       </div>
     </div>
   </div>
 
   {% endif %}
-
+  <div id="slideupdata" class="panel" style="height: 430px;">
+    <div class="modal-header">
+      <h5 class="modal-title">DATA SAYA</h5>
+      <button onclick="slideHideData()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="chart">
+      <canvas id="myCharts" height="200"></canvas>
+      <canvas id="myChartss" height="200"></canvas>
+    </div>
+    <br>
+    <div class="container">
+        <a href="/my-attend-list" style="border-radius: 30px;" class="btn btn-primary btn-block btn-lg">Detail</a>
+    </div>
+    <br>
+  </div>
 {% else %}
   <div class="alert alert-primary text-center" role="alert">
     Kamu belum ada data kehadiran
   </div>
-  {% load static %}
-  <img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image">
-  <a href="/add-attend"><button id="chartbutton" style="border-radius: 30px;" class="btn btn-outline-primary btn-block" role="button">Yuk Tambah Data</button></a>
+  <div class="container">
+    <div class="row">
+      <div class="mr-auto">
+        <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="modal" style="width:170px;" disabled>Data Saya</button>
+      </div>
+      <div class="ml-auto">
+        <button onclick="slideShow()" style="width:170px;" class="btn btn-outline-primary btn-lg" role="button">Tambah Data</button>
+      </div>
+    </div>
+  </div>
+  <div id="slideup" class="panel">
+    <div class="modal-header">
+      <h5 class="modal-title">TAMBAH DATA KEHADIRAN</h5>
+      <button onclick="slideHide()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="container" style="height: 500px; overflow: auto; margin-top: 10px;">
+      <br>
+
+      <div class="container">
+        <form id="formedit" action="/add-attend/" method="POST">
+          {% csrf_token %}
+          <p> Isi Self Assesment dulu yuk <a href="https://selfass.bca.co.id/" role="button" target="_blank"><b>disini</b></a></p>
+          
+          <div class="form-group">
+            <label for="attendance_status">Status Kehadiran</label>
+            <select class="form-control" onclick="handleSelect(); button()" id="attendance_status" name="attendance_status" required>
+                <option>-</option>
+                <option value="WFO">WFO</option>
+                <option value="WFH">WFH</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+      
+          <div class="form-group" id="selfassstatuss" style="display: none;" >
+            <label for="selfassstatus">Hasil Selfass</label>
+            <select class="form-control" id="selfassstatus" name="selfassstatus" required>
+                <option>-</option>
+                <option>Resiko Kecil</option>
+                <option>Resiko Sedang</option>
+                <option>Resiko Besar</option>
+            </select>
+          </div>
+      
+          <div class="form-group" id="working_locations" style="display: none;" >
+            <label for="working_location">Lokasi WFO</label>
+            <select class="form-control" id="working_location" name="working_location" required>
+                <option>-</option>
+                <option>Wisma Asia</option>
+                <option>Menara BCA</option>
+                <option>Gading Serpong</option>
+                <option>BLI</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="wfo_times" style="display: none;">
+            <label for="wfo_time">Waktu WFO</label>
+            <select class="form-control" id="wfo_time" name="wfo_time" required>
+                <option>-</option>
+                <option>07.30 - 16.30</option>
+                <option>08.30 - 17.30</option>
+                <option>09.30 - 18.30</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="conditions" style="display: none;">
+            <label for="name">Kesehatan</label>
+            <select class="form-control" onclick="handleSelect()" id="condition" name="condition" required>
+                <option>-</option>
+                <option value="Sehat">Sehat</option>
+                <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+  
+          <div class="form-group" id="sick_reasons" style="display: none;">
+            <label for="sick_reason">Alasan Sakit</label>
+            <input type="form" class="form-control" id="sick_reason" name="sick_reason" required>
+          </div>
+
+          <div class="d-flex justify-content-center buttonisikehadiran">
+            <button id="addButtons" type="submit" class="btn btn-primary btn-block btn-lg" disabled>Tambah Data</button>
+          </div>
+          <div style="margin-top: 20px;"></div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endif %}
 
-<!-- {% load static %}
-<img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image"> -->
+{% load static %}
+<img src="{% static 'attendance/worknew.jpg' %}" width="390px" class="health-image">
 
-<div id="backdrop" onclick="slideHide()"></div>
+<div id="backdrop" onclick="slideHide(); slideHideData()"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
 
+  function button() {
+    if (document.getElementById("attendance_status").value != "-") {
+      document.getElementById("addButtons").disabled = false;
+    }else {
+      document.getElementById("addButtons").disabled = true;
+    }
+  }
+
+  function slideShow(){
+    jQuery('#slideup').slideDown(600);
+    document.getElementById("backdrop").style.width = "100%";
+    document.getElementById("backdrop").style.opacity = "0.5";    
+  }
+
+  function slideHide(){
+    jQuery('#slideup').slideUp(600);
+    document.getElementById("backdrop").style.width = "0";
+    document.getElementById("backdrop").style.opacity = "0";
+  }
+
+  $('button#clicker').on("click", (function () {
+    $('button#clicker').removeClass("active");
+    $(this).addClass("active");
+  }));
+
+  function add_wfo(parm) {
+    const status = parm;
+    if (status == 'Manual') {
+      $("#formedit").css("display", "block");
+      $('#not_exist').css("display", "none")
+      undesable("undisabled")
+      $('#attendance_status').val('-');
+      $('#selfassstatus').val('-');
+      $('#working_location').val('-');
+      $('#wfo_time').val('-');
+      $('#condition').val('-');
+      $('#sick_reason').val('-');
+      $('#text-tanya').css("display", "none")
+    } else {
+      undesable("disabled")
+      $("#formedit").css("display", "none");
+      $.ajax({
+      url:'/add-edit-attend-post?status=' + status,
+      type:'GET',
+      contentType:'application/json; charset=utf-8',
+      dataType:'json',
+      success:function (result) {
+        if (result.attendance.not_exist) {
+          $('#not_exist').html(result.attendance.not_exist)
+          $("#formedit").css("display", "none");
+          $('#not_exist').css("display", "block");
+          $('#text-tanya').css("display", "block");
+        } else {
+          console.log(result);
+          $("#formedit").css("display", "block");
+          $('#not_exist').css("display", "none");
+          $('#text-tanya').css("display", "block");
+          $('#attendance_status').val(result.attendance.attendance_status);
+          $('#selfassstatus').val(result.attendance.selfassstatus);
+          $('#working_location').val(result.attendance.working_location);
+          $('#wfo_time').val(result.attendance.wfo_time);
+          $('#condition').val(result.attendance.condition);
+          $('#sick_reason').val(result.attendance.sick_reason);
+        }
+      }
+    });
+    }
+  }
+
+  function undesable(param) {
+    if (param == "disabled") {
+      $('#attendance_status').prop("disabled", true);
+      $('#selfassstatus').prop("disabled", true);
+      $('#working_location').prop("disabled", true);
+      $('#wfo_time').prop("disabled", true);
+      $('#condition').prop("disabled", true);
+      $('#sick_reason').prop("disabled", true);
+    } else if (param == "undisabled") {
+      $('#attendance_status').prop("disabled", false);
+      $('#selfassstatus').prop("disabled", false);
+      $('#working_location').prop("disabled", false);
+      $('#wfo_time').prop("disabled", false);
+      $('#condition').prop("disabled", false);
+      $('#sick_reason').prop("disabled", false);
+    }
+}
+
+  function handleSelect() {
+    if (document.getElementById("attendance_status").value == "WFO") {
+        document.getElementById("selfassstatuss").style.display = 'block';
+        document.getElementById("working_locations").style.display = 'block';
+        document.getElementById('wfo_times').style.display = 'block';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "WFH") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "Izin") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+    } else if(document.getElementById("attendance_status").value == "Sakit") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
+      }
+    }
+
+  $('#formedit').submit(function(){
+    $("#formedit :disabled").removeAttr('disabled');
+  });
+
+  function getData() {
+    console.log("test")
+    $.ajax({
+      url:'/my-attend',
+      type:'GET',
+      contentType:'application/json; charset=utf-8',
+      dataType:'json',
+      success:function (result) {
+        console.log(result.attendance.attend)
+        let kehadiran = document.getElementById('myCharts').getContext('2d');
+        let myPieCharts  = new Chart(kehadiran, {
+          type: 'pie',
+          data: {
+                labels: ['Hadir', 'Tidak Hadir'],
+                datasets: [{
+                    backgroundColor: ['#007bff','#f8f9fa'],
+                    data: result.attendance.attend,
+                }]
+            },
+          options: {
+            title: {
+              display : true,
+              text : 'KEHADIRAN',
+              position : 'bottom',
+              fontSize : '18',
+              fontColor : '#0275d8'
+            }
+          }
+          });
+  
+        let ctxx = document.getElementById('myChartss').getContext('2d');
+        let myPieChart  = new Chart(ctxx, {
+          type: 'pie',
+          data: {
+                labels: ['Sehat', 'Sakit'],
+                datasets: [{
+                    backgroundColor: ['#007bff','#f8f9fa'],
+                    data: result.attendance.condition,
+                }]
+            },
+          options: {
+            title: {
+              display : true,
+              text : 'KESEHATAN',
+              position : 'bottom',
+              fontSize : '18',
+              fontColor : '#0275d8'
+            }
+          }
+        });
+      }
+    });
+  }
+</script>
 {% endblock %}

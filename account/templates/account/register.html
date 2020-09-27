@@ -14,13 +14,14 @@ REGISTRASI HEI-ASYST
             <hr>
             <form method="POST" action="/register/">
                 {% csrf_token %}
-                {{ profile_form.full_name |as_crispy_field }}
+                {{ profile_form.full_name|as_crispy_field }}
                 {{ form.username|as_crispy_field }}
-                {{ form.password|as_crispy_field }}
+                {{ form.password1|as_crispy_field }}
+                {{ form.password2|as_crispy_field }}
                 <div class="text-account">
-                    Kembali ke halaman <a href="/login"><b>masuk</b></a> 
+                    Kembali ke halaman <a href="/login/"><b>masuk</b></a> 
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Masuk</button>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">Registrasi</button>
             </form>
         </div>
     </div>

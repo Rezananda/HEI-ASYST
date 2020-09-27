@@ -1,14 +1,19 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from account.models import UserProfile
 from django.contrib.auth.models import User
 
-class UserModelForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password",}), label=False)
-    username= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Inisial'}), label=False)
+class UserModelForm(UserCreationForm):
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password",}), label=False)
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Konfirmasi Password",}), label=False)
+    username= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Inisial, contoh : PMR', 'maxlength' : '3'}), label=False)
+
+
     class Meta:
         model = User
-        fields = ['username', 'password']
-        labels = {'username' : 'Inisial', 'password' : 'Password'}
+
+        fields = ('username', 'password1', 'password2')
+        # labels = {'username' : 'Inisial', 'password1' : 'Password', 'password2' : 'Konfirmasi Password'}
         help_texts = {
             'username': None
         }
@@ -18,4 +23,3 @@ class UserProfileModelForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['full_name']
-        labels = {'full_name' : 'Nama Lengkap'}
