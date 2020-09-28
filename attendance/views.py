@@ -249,6 +249,27 @@ def manager_page(request):
 
     getDate = request.GET.get('date', '')
     getdateNow = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+    getALLUserAttend = UserAttendance.objects.filter(created_at__date = getdateNow)
+
+    getListAllUserAttend = []
+
+    for j in getALLUserAttend:
+        getListAllUserAttend.append(j.authors.username)
+
+    getAllUser = UserProfile.objects.all()
+
+    geListAttend = []
+
+    for i in getAllUser:
+        if i.user.username not in getListAllUserAttend:
+            geListAttend.append(i.full_name)
+
+    getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
+
+    getFullNameSakit = []
+    for i in getAuthor:
+        getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
+        getFullNameSakit.append(getFullNameByAuthor.full_name)
 
     if getDate == 'now':
 
@@ -268,13 +289,6 @@ def manager_page(request):
         kehadiran = []
         kehadiran.append(getWfoCount+getWfhCount)
         kehadiran.append(getSakitCount+getIzinCount)
-        
-        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
-    
-        getFullNameSakit = []
-        for i in getAuthor:
-            getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
-            getFullNameSakit.append(getFullNameByAuthor.full_name)
 
         getAllData = UserAttendance.objects.filter(created_at__date = getdateNow).order_by('-created_at')
 
@@ -284,7 +298,8 @@ def manager_page(request):
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,
-            'status_data' : 'DATA HARI INI'
+            'status_data' : 'DATA HARI INI',
+            'not_attend' : geListAttend
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -306,13 +321,6 @@ def manager_page(request):
         kehadiran = []
         kehadiran.append(getWfoCount+getWfhCount)
         kehadiran.append(getSakitCount+getIzinCount)
-        
-        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
-    
-        getFullNameSakit = []
-        for i in getAuthor:
-            getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
-            getFullNameSakit.append(getFullNameByAuthor.full_name)
 
         getAllData = UserAttendance.objects.all().order_by('-created_at')
 
@@ -322,7 +330,8 @@ def manager_page(request):
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,
-            'status_data' : 'SEMUA DATA'
+            'status_data' : 'SEMUA DATA',
+            'not_attend' : geListAttend
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -344,13 +353,6 @@ def manager_page(request):
         kehadiran = []
         kehadiran.append(getWfoCount+getWfhCount)
         kehadiran.append(getSakitCount+getIzinCount)
-        
-        getAuthor = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow)
-    
-        getFullNameSakit = []
-        for i in getAuthor:
-            getFullNameByAuthor = UserProfile.objects.get(user = i.authors)
-            getFullNameSakit.append(getFullNameByAuthor.full_name)
 
         getAllData = UserAttendance.objects.filter(created_at__date = getDate).order_by('-created_at')
 
@@ -360,7 +362,8 @@ def manager_page(request):
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,
-            'status_data' : 'DATA ' + getDate
+            'status_data' : 'DATA ' + getDate,
+            'not_attend' : geListAttend
         }
         return render(request, 'attendance/manager_page.html', context)
 
