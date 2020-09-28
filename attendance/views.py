@@ -56,7 +56,7 @@ def index(request):
 def all_attendance(request):
     getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
     getAllData = UserAttendance.objects.filter(created_at__date = getdate)
-
+    
     getFullName = []
     for i in getAllData:
         getUserId = UserProfile.objects.get(user = i.authors)
@@ -69,9 +69,11 @@ def all_attendance(request):
         else:
             getFullName.append(getUserId.full_name)
 
+    datenow = timezone.localtime(timezone.now()).strftime('%d-%m-%Y')
     context = {
         'data' : getFullName,
         'full_name' : request.session['full_name'],
+        'datenow' : datenow
     }
     return render(request, 'attendance/all_attendance.html', context)
 

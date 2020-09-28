@@ -14,8 +14,7 @@ def user_login(request):
         username = request.POST.get('inisial')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        print(user)
-        
+
         if user:
             user_status = UserProfile.objects.get(user = user)
             if user_status.is_user or user_status.is_manager == True:
@@ -41,7 +40,6 @@ def user_login(request):
 def register(request):
     if request.method == 'POST':
         user_form = UserModelForm(request.POST)
-        print(user_form)
         profile_form = UserProfileModelForm(request.POST)
 
         if user_form.is_valid():

@@ -122,8 +122,27 @@ img.health-image {
 
 .chart {
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
+
+.chart::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.chart::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+
+.chart::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+.chart::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: #e6e6e6;
+}
+
 
 button#chartbutton {
     height: 45px;
