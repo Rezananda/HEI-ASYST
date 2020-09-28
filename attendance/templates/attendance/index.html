@@ -17,10 +17,10 @@ HEI-ASYST
   <div class="container">
     <div class="row">
       <div class="mr-auto">
-        <button style="width:165px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Data Hari Ini</button>
+        <button style="width:165px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Data Hari Ini</button>
       </div>
       <div class="ml-auto">
-        <button  class="btn btn-outline-primary btn-lg" style="width:165px;" onclick="slideShowData(); getData()">Data Saya</button>
+        <button  class="btn btn-outline-primary btn-lg" style="width:165px; border-radius: 25px;" onclick="slideShowData(); getData()">Data Saya</button>
       </div>
     </div>
   </div>
@@ -75,10 +75,10 @@ HEI-ASYST
   <div class="container">
     <div class="row">
       <div class="mr-auto">
-        <button  class="btn btn-outline-primary btn-lg" style="width:170px;" onclick="slideShowData(); getData()">Data Saya</button>
+        <button  class="btn btn-outline-primary btn-lg" style="width:170px; border-radius: 25px;" onclick="slideShowData(); getData()">Data Saya</button>
       </div>
       <div class="ml-auto">
-        <button style="width:170px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Isi Kehadiran</button>
+        <button style="width:170px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Isi Kehadiran</button>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@ HEI-ASYST
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="container" style="height: 500px; overflow: auto; margin-top: 10px;">
+    <div class="container" style="height: 550px; overflow: auto; margin-top: 10px;">
       <div class="alert alert-primary alert-dismissible fade show" role="alert">
         Isi kehadiran berdasarkan data WFO/WFHmu terakhir, atau dapat diisi secara manual.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -97,13 +97,12 @@ HEI-ASYST
         </button>
       </div>
       <div class="d-flex justify-content-center">
-        <button id="clicker" style="width: 100px;" class="btn btn-outline-primary clicker" onclick="add_wfo('WFO')">Data WFO</button>&nbsp;
-        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px;" onclick="add_wfo('WFH')">Data WFH</button>&nbsp;
-        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px;" onclick="add_wfo('Manual')">Manual</button>
+        <button id="clicker" style="width: 100px; border-radius: 25px;" class="btn btn-outline-primary clicker" onclick="add_wfo('WFO')">Data WFO</button>&nbsp;
+        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px; border-radius: 25px;" onclick="add_wfo('WFH')">Data WFH</button>&nbsp;
+        &nbsp;<button id="clicker"  class="btn btn-outline-primary clicker" style="width: 100px; border-radius: 25px;" onclick="add_wfo('Manual')">Manual</button>
       </div>
       <br>
       <div id="not_exist" class="container text-center"></div>
-      <div class="container">
         <form style="display: none;" id="formedit" action="/add-edit-attend-post/" method="POST">
           {% csrf_token %}
 
@@ -111,7 +110,7 @@ HEI-ASYST
           
           <div class="form-group">
             <label for="attendance_status">Status Kehadiran</label>
-            <select class="form-control" onclick="handleSelect()" id="attendance_status" name="attendance_status" required disabled>
+            <select class="form-control" onchange="handleSelect()" id="attendance_status" name="attendance_status" required disabled>
                 <option>-</option>
                 <option value="WFO">WFO</option>
                 <option value="WFH">WFH</option>
@@ -153,7 +152,7 @@ HEI-ASYST
           
           <div class="form-group" id="conditions">
             <label for="name">Kesehatan</label>
-            <select class="form-control" onclick="handleSelect()" id="condition" name="condition" required disabled>
+            <select class="form-control" onchange="handleSelect()" id="condition" name="condition" required disabled>
                 <option>-</option>
                 <option value="Sehat">Sehat</option>
                 <option value="Sakit">Sakit</option>
@@ -169,21 +168,21 @@ HEI-ASYST
           <div class="container">
             <div class="row">
               <div class="mr-auto">
-                <button type="button" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Tidak, Ubah Data</button>
+                <button id="edit-data" style="border-radius: 25px;" type="button" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Tidak, Ubah Data</button>
               </div>
               <div class="ml-auto">
-                <button type="submit" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Sama, Tambah Data</button>
+                <button id="submit-add" style="border-radius: 25px;" type="submit" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Sama, Tambah Data</button>
               </div>
             </div>
           </div>
+          <button id="submit-manual" style="display: none; border-radius: 25px;" type="submit" class="btn btn-primary btn-block" onclick="slideHide()" >Tambah Data</button>
           <div style="margin-top: 20px;"></div>
         </form>
-      </div>
     </div>
   </div>
 
   {% endif %}
-  <div id="slideupdata" class="panel" style="height: 430px;">
+  <div id="slideupdata" class="panel">
     <div class="modal-header">
       <h5 class="modal-title">DATA SAYA</h5>
       <button onclick="slideHideData()" type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -196,7 +195,25 @@ HEI-ASYST
     </div>
     <br>
     <div class="container">
-        <a href="/my-attend-list" style="border-radius: 30px;" class="btn btn-primary btn-block btn-lg">Detail</a>
+      <div class="alert alert-primary alert-dismissible fade show" style="height: 150px; font-size: x-small;" role="alert">
+        <b>Keterangan:</b><br>
+        <b>Kehadiran</b>
+        <ul>
+          <li>Hadir: Gabungan jumlah WFO/WFH</li>
+          <li>Tidak Hadir: Jumlah izin dari status kehadiran</li>
+        </ul>
+        <b>Kesehatan</b>
+        <ul>
+          <li>Sehat: Jumlah sehat dari status kesehatan</li>
+          <li>Sakit: Jumlah sakit dari status kehadiran</li>
+        </ul>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="container">
+        <a href="/my-attend-list" style="border-radius: 25px;" class="btn btn-primary btn-block">Detail</a>
     </div>
     <br>
   </div>
@@ -207,10 +224,10 @@ HEI-ASYST
   <div class="container">
     <div class="row">
       <div class="mr-auto">
-        <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="modal" style="width:170px;" disabled>Data Saya</button>
+        <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="modal" style="width:170px; border-radius: 25px;" disabled>Data Saya</button>
       </div>
       <div class="ml-auto">
-        <button onclick="slideShow()" style="width:170px;" class="btn btn-outline-primary btn-lg" role="button">Tambah Data</button>
+        <button onclick="slideShow()" style="width:170px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" role="button">Tambah Data</button>
       </div>
     </div>
   </div>
@@ -223,7 +240,6 @@ HEI-ASYST
     </div>
     <div class="container" style="height: 500px; overflow: auto; margin-top: 10px;">
       <br>
-
       <div class="container">
         <form id="formedit" action="/add-attend/" method="POST">
           {% csrf_token %}
@@ -231,7 +247,7 @@ HEI-ASYST
           
           <div class="form-group">
             <label for="attendance_status">Status Kehadiran</label>
-            <select class="form-control" onclick="handleSelect(); button()" id="attendance_status" name="attendance_status" required>
+            <select class="form-control" onchange="handleSelect(); button()" id="attendance_status" name="attendance_status" required>
                 <option>-</option>
                 <option value="WFO">WFO</option>
                 <option value="WFH">WFH</option>
@@ -273,7 +289,7 @@ HEI-ASYST
           
           <div class="form-group" id="conditions" style="display: none;">
             <label for="name">Kesehatan</label>
-            <select class="form-control" onclick="handleSelect()" id="condition" name="condition" required>
+            <select class="form-control" onchange="handleSelect()" id="condition" name="condition" required>
                 <option>-</option>
                 <option value="Sehat">Sehat</option>
                 <option value="Sakit">Sakit</option>
@@ -284,10 +300,7 @@ HEI-ASYST
             <label for="sick_reason">Alasan Sakit</label>
             <input type="form" class="form-control" id="sick_reason" name="sick_reason" required>
           </div>
-
-          <div class="d-flex justify-content-center buttonisikehadiran">
-            <button id="addButtons" type="submit" class="btn btn-primary btn-block btn-lg" disabled>Tambah Data</button>
-          </div>
+          <button id="addButtons" style="border-radius: 25px;" type="submit" class="btn btn-primary btn-block" disabled>Tambah Data</button>
           <div style="margin-top: 20px;"></div>
         </form>
       </div>
@@ -331,13 +344,22 @@ HEI-ASYST
     const status = parm;
     if (status == 'Manual') {
       $("#formedit").css("display", "block");
+      $('#submit-manual').css("display", "block")
+      $('#submit-add').css("display", "none")
+      $('#edit-data').css("display", "none")
       $('#not_exist').css("display", "none")
       undesable("undisabled")
       $('#attendance_status').val('-');
+      $('#attendance_status').prop("disabled", false);
+      $('#selfassstatuss').css("display", "block");
       $('#selfassstatus').val('-');
+      $('#working_locations').css("display", "block");
       $('#working_location').val('-');
+      $('#wfo_times').css("display", "block");
       $('#wfo_time').val('-');
+      $('#conditions').css("display", "block");
       $('#condition').val('-');
+      $('#sick_reasons').css("display", "block");
       $('#sick_reason').val('-');
       $('#text-tanya').css("display", "none")
     } else {
@@ -350,20 +372,29 @@ HEI-ASYST
       dataType:'json',
       success:function (result) {
         if (result.attendance.not_exist) {
-          $('#not_exist').html(result.attendance.not_exist)
+          $('#not_exist').html(result.attendance.not_exist);
           $("#formedit").css("display", "none");
           $('#not_exist').css("display", "block");
           $('#text-tanya').css("display", "block");
+          $('#submit-manual').css("display", "none")
         } else {
-          console.log(result);
           $("#formedit").css("display", "block");
           $('#not_exist').css("display", "none");
           $('#text-tanya').css("display", "block");
+          $('#submit-manual').css("display", "none");
+          $('#submit-add').css("display", "block")
+          $('#edit-data').css("display", "block")
           $('#attendance_status').val(result.attendance.attendance_status);
+          $('#attendance_status').prop("disabled", true);
+          $('#selfassstatuss').css("display", "block");
           $('#selfassstatus').val(result.attendance.selfassstatus);
+          $('#working_locations').css("display", "block");
           $('#working_location').val(result.attendance.working_location);
+          $('#wfo_times').css("display", "block");
           $('#wfo_time').val(result.attendance.wfo_time);
+          $('#conditions').css("display", "block");
           $('#condition').val(result.attendance.condition);
+          $('#sick_reasons').css("display", "block");
           $('#sick_reason').val(result.attendance.sick_reason);
         }
       }
@@ -373,14 +404,14 @@ HEI-ASYST
 
   function undesable(param) {
     if (param == "disabled") {
-      $('#attendance_status').prop("disabled", true);
+      // $('#attendance_status').prop("disabled", true);
       $('#selfassstatus').prop("disabled", true);
       $('#working_location').prop("disabled", true);
       $('#wfo_time').prop("disabled", true);
       $('#condition').prop("disabled", true);
       $('#sick_reason').prop("disabled", true);
     } else if (param == "undisabled") {
-      $('#attendance_status').prop("disabled", false);
+      // $('#attendance_status').prop("disabled", false);
       $('#selfassstatus').prop("disabled", false);
       $('#working_location').prop("disabled", false);
       $('#wfo_time').prop("disabled", false);

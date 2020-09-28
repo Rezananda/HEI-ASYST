@@ -13,7 +13,7 @@ Kehadiran
       <th scope="row">{{ forloop.counter }}</th>
       <td>{{ data.created_at | date:'Y-m-d' }}</td>
       <td>{{ data.attendance_status }}</td>
-      <td><h5><a onclick="getStuff({{ data.id }}); slideShow()" class="badge badge-primary text-white">Detail</a></h5></td>
+      <td><h5><a onclick="getStuff({{ data.id }}); slideShow()" style="border-radius: 20px;" class="badge badge-primary text-white">Detail</a></h5></td>
     </tr>
     {% endfor %}
   </tbody>
@@ -84,19 +84,18 @@ Kehadiran
           <label for="sick_reason">Alasan Sakit</label>
           <input type="form" class="form-control" id="sick_reason" name="sick_reason" required disabled>
         </div>
-    
-      <!-- <button id="addButtons" type="submit" class="btn btn-primary btn-block btn-lg">Simpan</button> -->
-      <div class="container">
-        <div class="row">
-          <div class="mr-auto">
-            <button type="button" style="width: 150px;" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Ubah Data</button>
-          </div>
-          <div class="ml-auto">
-            <button id="tutup" type="button" style="width: 150px;" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Tutup</button>
-            <button id="simpan" type="submit" style="width: 150px; display: none;" class="btn btn-primary">Simpan</button>
+
+        <div class="container">
+          <div class="row">
+            <div class="mr-auto">
+              <button type="button" style="width: 150px; border-radius: 25px;" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Ubah Data</button>
+            </div>
+            <div class="ml-auto">
+              <button id="tutup" type="button" style="width: 150px; border-radius: 25px;" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Tutup</button>
+              <button id="simpan" type="submit" style="width: 150px; display: none; border-radius: 25px;" class="btn btn-primary">Simpan</button>
+            </div>
           </div>
         </div>
-      </div>
       <div style="height: 20px;"></div>
     </form>
   </div>
