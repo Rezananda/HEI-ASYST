@@ -15,12 +15,12 @@ HEI-ASYST
   {% load static %}
   {% if status_attend == 'SUDAH' %}
   <div class="container">
-    <div class="row">
-      <div class="mr-auto">
-        <button style="width:165px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Data Hari Ini</button>
+    <div class="row justify-content-around" id="flex-gap">
+      <div class="col-6">
+        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()">Data Saya</button>
       </div>
-      <div class="ml-auto">
-        <button  class="btn btn-outline-primary btn-lg" style="width:165px; border-radius: 25px;" onclick="slideShowData(); getData()">Data Saya</button>
+      <div class="col-6">
+        <button class="btn btn-outline-primary" onclick="slideShow()">Data Hari Ini</button>
       </div>
     </div>
   </div>
@@ -73,12 +73,12 @@ HEI-ASYST
   
   {% elif status_attend == 'BELUM'  %}
   <div class="container">
-    <div class="row">
-      <div class="mr-auto">
-        <button  class="btn btn-outline-primary btn-lg" style="width:170px; border-radius: 25px;" onclick="slideShowData(); getData()">Data Saya</button>
+    <div class="row justify-content-around" id="flex-gap">
+      <div class="col-6">
+        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()">Data Saya</button>
       </div>
-      <div class="ml-auto">
-        <button style="width:170px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" onclick="slideShow()">Isi Kehadiran</button>
+      <div class="col-6">
+        <button class="btn btn-outline-primary" onclick="slideShow()">Isi Kehadiran</button>
       </div>
     </div>
   </div>
@@ -222,12 +222,12 @@ HEI-ASYST
     Kamu belum ada data kehadiran
   </div>
   <div class="container">
-    <div class="row">
-      <div class="mr-auto">
-        <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="modal" style="width:170px; border-radius: 25px;" disabled>Data Saya</button>
+    <div class="row justify-content-around" id="flex-gap">
+      <div class="col-6">
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" disabled>Data Saya</button>
       </div>
-      <div class="ml-auto">
-        <button onclick="slideShow()" style="width:170px; border-radius: 25px;" class="btn btn-outline-primary btn-lg" role="button">Tambah Data</button>
+      <div class="col-6">
+        <button onclick="slideShow()" class="btn btn-outline-primary" role="button">Tambah Data</button>
       </div>
     </div>
   </div>

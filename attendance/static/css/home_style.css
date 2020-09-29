@@ -32,6 +32,17 @@ div.card-body {
     border-top-right-radius: 45px 45px;
 }
 
+#flex-gap > div > button {
+    width:160px; 
+    max-width: 100%; 
+    border-radius: 25px;
+    z-index: 1;
+}
+
+/* #flex-gap button {
+
+} */
+
 nav.nav-bottom {
     position: fixed;
     bottom: 0;
@@ -113,7 +124,9 @@ img.health-image {
     right: 0;
     bottom: 0;
     margin-bottom: 50px;
-    z-index: 0;
+    z-index: -1;
+    width: 390px;
+    max-width: 100%;
 }
 
 /* div.panel {
