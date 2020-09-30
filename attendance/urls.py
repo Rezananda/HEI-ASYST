@@ -19,4 +19,5 @@ urlpatterns = [
     path('admin-page/<int:id>/', views.admin_page_detail, name='admin_page_detail'),
     path('admin-page/delete/<int:id>/', views.admin_delete_member, name='admin_delete_member'),
     path('logout/', views.user_logout, name='user_logout'),
+    path('download-to-excel/', views.download_to_excel, name='download_to_excel'),
 ]

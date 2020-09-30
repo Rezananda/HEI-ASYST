@@ -7,7 +7,13 @@ from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.http import HttpResponse, Http404
+from io import BytesIO
+from django.conf import settings
+import pandas as pd
 import json
+import os
+
 
 # Create your views here.
 @login_required
@@ -390,6 +396,54 @@ def manager_member_detail(request, id):
     }
 
     return JsonResponse({'attendance':data}, status=200)
+
+@login_required
+def download_to_excel(request):
+
+    data = UserAttendance.objects.all().order_by('-created_at')
+    
+    initial = [] 
+    attendance_status = []
+    selfassstatus = []
+    working_location = []
+    wfo_time = []
+    condition = []
+    sick_reason = []
+    created_at = []
+
+    for b in data:
+        initial.append(b.authors.username)
+        attendance_status.append(b.attendance_status)
+        selfassstatus.append(b.selfassstatus)
+        working_location.append(b.working_location)
+        wfo_time.append(b.wfo_time)
+        condition.append(b.condition)
+        sick_reason.append(b.sick_reason)
+        created_at.append(b.created_at.strftime('%Y-%m-%d'))
+    
+        getAllUser = UserProfile.objects.all()
+
+    allData = {
+        'Inisial' : initial,
+        'Status Kehadiran' : attendance_status,
+        'Self Assesment' : selfassstatus,
+        'Lokasi WFO' : working_location,
+        'Waktu WFO' : wfo_time,
+        'Kesehatan' : condition,
+        'Alasan Sakit/Izin' : sick_reason,
+        'Waktu Isi' : created_at,
+    }
+
+    df = pd.DataFrame(allData, columns = ['Inisial', 'Status Kehadiran', 'Self Assesment', 'Lokasi WFO' , 'Waktu WFO', 'Kesehatan', 'Alasan Sakit/Izin' , 'Waktu Isi'])
+
+    writer = pd.ExcelWriter('attendance.xlsx', engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Sheet1')
+
+    writer.save()
+    response = HttpResponse(open("/app/heiAsyst/attendance.xlsx", 'rb').read())
+    response['Content-Type'] = 'application/vnd.ms-excel'
+    response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
+    return response
 
 @login_required
 def admin_page(request):

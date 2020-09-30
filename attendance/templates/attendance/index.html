@@ -116,6 +116,7 @@ HEI-ASYST
                 <option value="WFH">WFH</option>
                 <option value="Izin">Izin</option>
                 <option value="Sakit">Sakit</option>
+                <option value="Cuti">Cuti</option>
             </select>
           </div>
       
@@ -160,7 +161,7 @@ HEI-ASYST
           </div>
 
           <div class="form-group" id="sick_reasons">
-            <label for="sick_reason">Alasan Sakit</label>
+            <label for="sick_reason">Alasan Sakit/Izin</label>
             <input type="form" class="form-control" id="sick_reason" name="sick_reason" required disabled>
           </div>
 
@@ -253,6 +254,7 @@ HEI-ASYST
                 <option value="WFH">WFH</option>
                 <option value="Izin">Izin</option>
                 <option value="Sakit">Sakit</option>
+                <option value="Cuti">Cuti</option>
             </select>
           </div>
       
@@ -297,7 +299,7 @@ HEI-ASYST
           </div>
   
           <div class="form-group" id="sick_reasons" style="display: none;">
-            <label for="sick_reason">Alasan Sakit</label>
+            <label for="sick_reason">Alasan Sakit/Izin</label>
             <input type="form" class="form-control" id="sick_reason" name="sick_reason" required>
           </div>
           <button id="addButtons" style="border-radius: 25px;" type="submit" class="btn btn-primary btn-block" disabled>Tambah Data</button>
@@ -474,8 +476,22 @@ HEI-ASYST
           document.getElementById('sick_reasons').style.display = 'none';
           document.getElementById('sick_reason').value = '-';
         }
-      }
+    } else if(document.getElementById("attendance_status").value == "Cuti") {
+        document.getElementById("selfassstatuss").style.display = 'none';
+        document.getElementById("selfassstatus").value = '-';
+        document.getElementById("working_locations").style.display = 'none';
+        document.getElementById("working_location").value = '-';
+        document.getElementById("wfo_times").style.display = 'none';
+        document.getElementById("wfo_time").value = '-';
+        document.getElementById('conditions').style.display = 'block';
+        if (document.getElementById("condition").value == "Sakit"){
+          document.getElementById('sick_reasons').style.display = 'block';
+        } else if (document.getElementById("condition").value == "Sehat"){
+          document.getElementById('sick_reasons').style.display = 'none';
+          document.getElementById('sick_reason').value = '-';
+        }
     }
+  }
 
   $('#formedit').submit(function(){
     $("#formedit :disabled").removeAttr('disabled');
