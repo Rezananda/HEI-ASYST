@@ -440,7 +440,7 @@ def download_to_excel(request):
     df.to_excel(writer, sheet_name='Sheet1')
 
     writer.save()
-    response = HttpResponse(open("/app/heiAsyst/attendance.xlsx", 'rb').read())
+    response = HttpResponse(open("/app/attendance.xlsx", 'rb').read())
     response['Content-Type'] = 'application/vnd.ms-excel'
     response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
     return response
