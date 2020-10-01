@@ -56,8 +56,8 @@ def register(request):
             
             return redirect('user_login')
         else:
-            messages.info(request, 'Input tidak valid')
-            return redirect('user_login')
+            messages.info(request, user_form.errors.as_data())
+            return redirect('register')
 
     elif request.method == 'GET':
 

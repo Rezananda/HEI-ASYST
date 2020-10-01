@@ -155,7 +155,7 @@ PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_ORIENTATION = 'portrait'
 PWA_APP_START_URL = '/login'
-PWA_APP_STATUS_BAR_COLOR = '#007bff'
+PWA_APP_STATUS_BAR_COLOR = 'black-translucent'
 PWA_APP_ICONS = [
     {
         'src': '/static/account/icons/icon-192x192.png',

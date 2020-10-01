@@ -4,11 +4,9 @@ from account.models import UserProfile
 from django.contrib.auth.models import User
 
 class UserModelForm(UserCreationForm):
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password",}), label=False)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password, minimal 8 Digit",}), label=False)
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Konfirmasi Password",}), label=False)
-    username= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Inisial, contoh : PMR', 'maxlength' : '3'}), label=False)
-
-
+    username= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Inisial, contoh : PMR', 'maxlength' : '3'}), label=False)    
     class Meta:
         model = User
 
