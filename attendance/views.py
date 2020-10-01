@@ -402,45 +402,51 @@ def download_to_excel(request):
 
     data = UserAttendance.objects.all().order_by('-created_at')
     
-    initial = [] 
+    name = [] 
     attendance_status = []
     selfassstatus = []
     working_location = []
     wfo_time = []
     condition = []
     sick_reason = []
-    created_at = []
+    created_at_date = []
+    created_at_time = []
+    
 
     for b in data:
-        initial.append(b.authors.username)
+        name.append(b.authors.userprofile.full_name)
         attendance_status.append(b.attendance_status)
         selfassstatus.append(b.selfassstatus)
         working_location.append(b.working_location)
         wfo_time.append(b.wfo_time)
         condition.append(b.condition)
         sick_reason.append(b.sick_reason)
-        created_at.append(b.created_at.strftime('%Y-%m-%d'))
+        getDateTime = timezone.localtime(b.created_at)
+        created_at_date.append(getDateTime.strftime('%Y-%m-%d'))
+        created_at_time.append(getDateTime.strftime('%H:%M'))
     
         getAllUser = UserProfile.objects.all()
 
     allData = {
-        'Inisial' : initial,
+        'Nama' : name,
         'Status Kehadiran' : attendance_status,
         'Self Assesment' : selfassstatus,
         'Lokasi WFO' : working_location,
         'Waktu WFO' : wfo_time,
         'Kesehatan' : condition,
         'Alasan Sakit/Izin' : sick_reason,
-        'Waktu Isi' : created_at,
+        'Tanggal Isi' : created_at_date,
+        'Waktu Isi' : created_at_time,
     }
 
-    df = pd.DataFrame(allData, columns = ['Inisial', 'Status Kehadiran', 'Self Assesment', 'Lokasi WFO' , 'Waktu WFO', 'Kesehatan', 'Alasan Sakit/Izin' , 'Waktu Isi'])
+    df = pd.DataFrame(allData, columns = ['Nama', 'Status Kehadiran', 'Self Assesment', 'Lokasi WFO' , 'Waktu WFO', 'Kesehatan', 'Alasan Sakit/Izin' , 'Tanggal Isi', 'Waktu Isi'])
 
     writer = pd.ExcelWriter('attendance.xlsx', engine='xlsxwriter')
     df.to_excel(writer, sheet_name='Sheet1')
 
     writer.save()
     response = HttpResponse(open("/app/attendance.xlsx", 'rb').read())
+    # response = HttpResponse(open("/Users/Reza Nanda/Documents/myDjangoProject/heiAsyst/attendance.xlsx", 'rb').read())
     response['Content-Type'] = 'application/vnd.ms-excel'
     response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
     return response
