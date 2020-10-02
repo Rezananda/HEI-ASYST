@@ -17,10 +17,10 @@ HEI-ASYST
   <div class="container">
     <div class="row justify-content-around" id="flex-gap">
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()">Data Saya</button>
+        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()"><i class="fa fa-list fa-lg" aria-hidden="true"></i>&nbsp; Data Saya</button>
       </div>
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShow()">Data Hari Ini</button>
+        <button class="btn btn-outline-primary" onclick="slideShow()"><i class="fa fa-list-alt fa-lg" aria-hidden="true"></i>&nbsp; Data Hari Ini</button>
       </div>
     </div>
   </div>
@@ -75,10 +75,10 @@ HEI-ASYST
   <div class="container">
     <div class="row justify-content-around" id="flex-gap">
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()">Data Saya</button>
+        <button class="btn btn-outline-primary" onclick="slideShowData(); getData()"><i class="fa fa-list fa-lg" aria-hidden="true"></i>&nbsp; Data Saya</button>
       </div>
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShow()">Isi Kehadiran</button>
+        <button class="btn btn-outline-primary" onclick="slideShow(); add_wfo('status')"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp; Isi Kehadiran</button>
       </div>
     </div>
   </div>
@@ -90,8 +90,14 @@ HEI-ASYST
       </button>
     </div>
     <div class="container" style="height: 550px; overflow: auto; margin-top: 10px;">
-      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <div class="alert alert-primary alert-dismissible fade show" style="height: 65px; max-height: 100%; font-size: small;" role="alert">
         Isi kehadiran berdasarkan data WFO/WFHmu terakhir, atau dapat diisi secara manual.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert alert-primary alert-dismissible fade show" style="height: 45px; max-height: 100%; font-size: small;" role="alert">
+        Kemarin kamu <b id="lates-status"></b>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -214,7 +220,7 @@ HEI-ASYST
       </div>
     </div>
     <div class="container">
-        <a href="/my-attend-list" style="border-radius: 25px;" class="btn btn-primary btn-block">Detail</a>
+        <a href="/my-attend-list" style="border-radius: 25px;" class="btn btn-primary btn-block"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp; Detail</a>
     </div>
     <br>
   </div>
@@ -344,7 +350,17 @@ HEI-ASYST
 
   function add_wfo(parm) {
     const status = parm;
-    if (status == 'Manual') {
+    if (status == "status"){
+        $.ajax({
+        url:'/add-edit-attend-post?status=' + status,
+        type:'GET',
+        contentType:'application/json; charset=utf-8',
+        dataType:'json',
+        success:function (result) {
+          $("#lates-status").html(result.attendance.attendance_status)
+        }
+      });
+    } else if (status == 'Manual') {
       $("#formedit").css("display", "block");
       $('#submit-manual').css("display", "block")
       $('#submit-add').css("display", "none")
@@ -498,14 +514,12 @@ HEI-ASYST
   });
 
   function getData() {
-    console.log("test")
     $.ajax({
       url:'/my-attend',
       type:'GET',
       contentType:'application/json; charset=utf-8',
       dataType:'json',
       success:function (result) {
-        console.log(result.attendance.attend)
         let kehadiran = document.getElementById('myCharts').getContext('2d');
         let myPieCharts  = new Chart(kehadiran, {
           type: 'pie',

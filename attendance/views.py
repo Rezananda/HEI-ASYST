@@ -66,12 +66,14 @@ def all_attendance(request):
     getFullName = []
     for i in getAllData:
         getUserId = UserProfile.objects.get(user = i.authors)
-        getSick = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Sakit')
-        getIzin = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin')
-        if getSick:
+        getSick = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
+
+        if getSick.attendance_status == "Sakit":
             getFullName.append(getUserId.full_name + '(Sakit)')
-        elif getIzin:
+        elif getSick.attendance_status == "Izin":
             getFullName.append(getUserId.full_name + '(Izin)')
+        elif getSick.attendance_status == "Cuti":
+            getFullName.append(getUserId.full_name + '(Cuti)')
         else:
             getFullName.append(getUserId.full_name)
 
@@ -162,7 +164,7 @@ def my_attendance_edit(request, id):
     
     attendance.save()
 
-    messages.success(request, 'Berhasil ubah data!')
+    messages.info(request, 'Berhasil ubah data!')
 
     return redirect('my_attendance_list')
 
@@ -192,7 +194,7 @@ def add_attend(request):
 
     attendance.save()
 
-    messages.success(request, 'Berhasil tambah data!')
+    messages.info(request, 'Berhasil tambah data!')
     return redirect('all_attendance')
 
 @login_required
@@ -210,13 +212,22 @@ def add_edit_attend_post(request):
 
         attendance.save()
 
-        messages.success(request, 'Berhasil tambah data!')
+        messages.info(request, 'Berhasil tambah data!')
         return redirect('all_attendance')
 
     else:
         getStatus = request.GET.get('status', '')
         try:
-            if getStatus == 'WFO':
+            if getStatus == 'status':
+                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
+                getLatesStatus = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
+                
+                context = {
+                    'attendance_status' : getLatesStatus.attendance_status
+                }
+                return JsonResponse({'attendance':context}, status=200)
+
+            elif getStatus == 'WFO':
                 getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
                 getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').latest('id')
 
@@ -246,7 +257,7 @@ def add_edit_attend_post(request):
             
         except UserAttendance.DoesNotExist:
             context = {
-                'not_exist' : 'Data belum ada :( , Kamu dapat menambah data baru pada tombol "Manual"'
+                'not_exist' : 'Belum ada data, kamu dapat menambah data baru pada tombol "Manual".'
             }
             return JsonResponse({'attendance':context}, status=200)
 
@@ -497,7 +508,7 @@ def admin_delete_member(request, id):
     except UserAttendance.DoesNotExist:
         pass
 
-    messages.success(request, 'Berhasil hapus data!')
+    messages.info(request, 'Berhasil hapus data!')
 
     return redirect('admin_page')
 
