@@ -6,8 +6,12 @@ Kehadiran
 
 {% block content %}
 
+<div class="form-group">
+  <input type="text" class="form-control" placeholder="Cari data..." id="search-data" name="search-data" >
+</div>
+
 <table class="table table-striped">
-  <tbody>
+  <tbody id="all-tables">
   {% for data in attendance %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
@@ -102,6 +106,7 @@ Kehadiran
   </div>
 </div>
 <div id="backdrop" onclick="slideHide()"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   function slideShow(){
     jQuery('#slideup').slideDown(600);
@@ -115,6 +120,15 @@ Kehadiran
     document.getElementById("backdrop").style.opacity = "0";
     $("#form-edit").removeAttr("action");
   } 
+
+  $(document).ready(function(){
+    $("#search-data").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#all-tables tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
 
   function getStuff(elem) {
     const id = elem;

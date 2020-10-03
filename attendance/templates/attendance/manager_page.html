@@ -92,6 +92,9 @@
               Tidak ada data
             </div>
             {% else %}
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Cari data..." id="search-data" name="search-data" >
+            </div>
             <div style="overflow-y: auto; height: 500px; overflow-x: auto;">
               <table class="table table-striped">
                 <thead>
@@ -103,7 +106,7 @@
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="all-tables">
                 {% for data in attendance %}
                   <tr>
                     <th scope="row">{{ forloop.counter }}</th>
@@ -225,6 +228,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
+
+      $(document).ready(function(){
+        $("#search-data").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#all-tables tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        
       function getMember(elem) {
           const id = elem;
           

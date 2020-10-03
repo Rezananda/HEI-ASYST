@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404
 from io import BytesIO
 from django.conf import settings
+from datetime import datetime
 import pandas as pd
 import json
 import os
@@ -122,6 +123,7 @@ def my_attendance_list(request):
     context = {
         'full_name' : request.session['full_name'],
         'attendance' : getListAttendance,
+        'user_id' : getUserId.user_id,
         'url' : 'DAFTAR DATA',
         'back_url' : '/'
     }
