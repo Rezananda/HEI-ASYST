@@ -20,7 +20,7 @@ HEI-ASYST
         <button class="btn btn-outline-primary" onclick="slideShowData(); getData()"><i class="fa fa-list fa-lg" aria-hidden="true"></i>&nbsp; Data Saya</button>
       </div>
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShow()"><i class="fa fa-list-alt fa-lg" aria-hidden="true"></i>&nbsp; Data Hari Ini</button>
+        <button class="btn btn-outline-primary" onclick="slideShow()"><i class="fa fa-list-alt fa-lg" aria-hidden="true"></i>&nbsp;Data Hari Ini</button>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ HEI-ASYST
         <button class="btn btn-outline-primary" onclick="slideShowData(); getData()"><i class="fa fa-list fa-lg" aria-hidden="true"></i>&nbsp; Data Saya</button>
       </div>
       <div class="col-6">
-        <button class="btn btn-outline-primary" onclick="slideShow(); add_wfo('status')"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp; Isi Kehadiran</button>
+        <button class="btn btn-outline-primary" onclick="slideShow(); add_wfo('status')"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp;Tambah Data</button>
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@ HEI-ASYST
     </div>
     <div class="container" style="height: 550px; overflow: auto; margin-top: 10px;">
       <div class="alert alert-primary alert-dismissible fade show" style="height: 65px; max-height: 100%; font-size: small;" role="alert">
-        Isi kehadiran berdasarkan data WFO/WFHmu terakhir, atau dapat diisi secara manual.
+        Isi kehadiran berdasarkan data WFO/WFH terakhirmu, atau dapat diisi secara manual.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -175,14 +175,14 @@ HEI-ASYST
           <div class="container">
             <div class="row">
               <div class="mr-auto">
-                <button id="edit-data" style="border-radius: 25px;" type="button" class="btn btn-outline-primary" onclick="undesable('undisabled')" data-target="#exampleModal">Tidak, Ubah Data</button>
+                <button id="edit-data" style="border-radius: 25px;" type="button" class="btn btn-outline-primary" onclick="undesable('undisabled'); show_simpan()" data-target="#exampleModal">Tidak, Ubah Data</button>
               </div>
               <div class="ml-auto">
                 <button id="submit-add" style="border-radius: 25px;" type="submit" class="btn btn-primary" data-toggle="modal" onclick="slideHide()" data-target="#exampleModal">Sama, Tambah Data</button>
               </div>
             </div>
           </div>
-          <button id="submit-manual" style="display: none; border-radius: 25px;" type="submit" class="btn btn-primary btn-block" onclick="slideHide()" >Tambah Data</button>
+          <button id="submit-manual" style="display: none; border-radius: 25px;" type="submit" class="btn btn-primary btn-block" onclick="slideHide()">Tambah Data</button>
           <div style="margin-top: 20px;"></div>
         </form>
     </div>
@@ -231,10 +231,10 @@ HEI-ASYST
   <div class="container">
     <div class="row justify-content-around" id="flex-gap">
       <div class="col-6">
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" disabled>Data Saya</button>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" disabled><i class="fa fa-list fa-lg" aria-hidden="true"></i>&nbsp; Data Saya</button>
       </div>
       <div class="col-6">
-        <button onclick="slideShow()" class="btn btn-outline-primary" role="button">Tambah Data</button>
+        <button onclick="slideShow()" class="btn btn-outline-primary" role="button"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp;Tambah Data</button>
       </div>
     </div>
   </div>

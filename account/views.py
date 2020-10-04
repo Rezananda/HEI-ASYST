@@ -52,11 +52,11 @@ def register(request):
             profile.user = user
             profile.save()
 
-            messages.info(request, 'Registrasi berhasil, sedang diproses oleh Admin!')
+            messages.info(request, 'Registrasi berhasil, hubungi Admin untuk aktivasi akunmu.')
             
             return redirect('user_login')
         else:
-            messages.info(request, user_form.errors.as_data())
+            messages.info(request, 'Input tidak valid!')
             return redirect('register')
 
     elif request.method == 'GET':

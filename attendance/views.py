@@ -318,7 +318,8 @@ def manager_page(request):
             'attendance' : getAllData,
             'datenow' : getdateNow,
             'status_data' : 'DATA HARI INI',
-            'not_attend' : geListAttend
+            'not_attend' : geListAttend,
+            'filter' : 'now'
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -350,7 +351,8 @@ def manager_page(request):
             'attendance' : getAllData,
             'datenow' : getdateNow,
             'status_data' : 'SEMUA DATA',
-            'not_attend' : geListAttend
+            'not_attend' : geListAttend,
+            'filter' : 'all'
         }
         return render(request, 'attendance/manager_page.html', context)
 
@@ -382,7 +384,8 @@ def manager_page(request):
             'attendance' : getAllData,
             'datenow' : getdateNow,
             'status_data' : 'DATA ' + getDate,
-            'not_attend' : geListAttend
+            'not_attend' : geListAttend,
+            'filter' : 'date'
         }
         return render(request, 'attendance/manager_page.html', context)
 
