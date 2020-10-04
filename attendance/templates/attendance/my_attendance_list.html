@@ -126,9 +126,9 @@ Kehadiran
       var value = $(this).val().toLowerCase();
       $("#all-tables tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
       });
     });
+  });
 
   function getStuff(elem) {
     const id = elem;

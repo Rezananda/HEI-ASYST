@@ -221,12 +221,11 @@
       $(document).ready(function(){
         $("#search-data").on("keyup", function() {
           var value = $(this).val().toLowerCase();
-          container-nav-bottom
           $("#all-tables tr").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
           });
         });
+      });
 
       $(document).ready(function(){
         $("#date-search").click(function(){
