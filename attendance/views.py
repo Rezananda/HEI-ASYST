@@ -24,7 +24,16 @@ def index(request):
         getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
         def checkAttend():
             getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
-            if getdate in str(getLatesAttend.created_at):
+            getTime = timezone.localtime(timezone.now()).strftime("%H:%M")
+            print(getdate)
+            print(getTime)
+            print(timezone.localtime(getLatesAttend.created_at).strftime('%H:%M'))
+            print(getLatesAttend.created_at.strftime('%H:%M'))
+            getDateCreate = timezone.localtime(getLatesAttend.created_at).strftime('%Y-%m-%d')
+            print(getDateCreate)
+            print(getLatesAttend.created_at)
+            # if getdate in str(getLatesAttend.created_at):
+            if getdate == getDateCreate:
                 return 'SUDAH'
             else:
                 return 'BELUM'
