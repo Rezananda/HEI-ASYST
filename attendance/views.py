@@ -24,15 +24,7 @@ def index(request):
         getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
         def checkAttend():
             getdate = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
-            getTime = timezone.localtime(timezone.now()).strftime("%H:%M")
-            print(getdate)
-            print(getTime)
-            print(timezone.localtime(getLatesAttend.created_at).strftime('%H:%M'))
-            print(getLatesAttend.created_at.strftime('%H:%M'))
             getDateCreate = timezone.localtime(getLatesAttend.created_at).strftime('%Y-%m-%d')
-            print(getDateCreate)
-            print(getLatesAttend.created_at)
-            # if getdate in str(getLatesAttend.created_at):
             if getdate == getDateCreate:
                 return 'SUDAH'
             else:
@@ -84,6 +76,8 @@ def all_attendance(request):
             getFullName.append(getUserId.full_name + '(Izin)')
         elif getSick.attendance_status == "Cuti":
             getFullName.append(getUserId.full_name + '(Cuti)')
+        elif getSick.attendance_status == "Training":
+            getFullName.append(getUserId.full_name + '(Training)')
         else:
             getFullName.append(getUserId.full_name)
 
@@ -99,26 +93,29 @@ def all_attendance(request):
 def my_attendance(request):
     getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
 
-    getSehatCondition = UserAttendance.objects.filter(authors_id = getUserId.user_id, condition = 'Sehat').count()
-    getSakitCondition = UserAttendance.objects.filter(authors_id = getUserId.user_id, condition = 'Sakit').count()
-    
-    kondisi = []
-    kondisi.append(getSehatCondition)
-    kondisi.append(getSakitCondition)
+    getCountData = []
 
-    getWfoCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').count()
-    getWfhCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFH').count()
-    getSakitCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Sakit').count()
-    getIzinCount = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin').count()
+    getWfo = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').count()
+    getCountData.append(getWfo)
 
-    kehadiran = []
-    kehadiran.append(getWfoCount+getWfhCount)
-    kehadiran.append(getSakitCount+getIzinCount)
+    getWfh = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFH').count()
+    getCountData.append(getWfh)
+
+    getSick = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Sakit').count()
+    getCountData.append(getSick)
+
+    getIzin = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin').count()
+    getCountData.append(getIzin)
+
+    getCuti = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Cuti').count()
+    getCountData.append(getCuti)
+
+    getTraining = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Training').count()
+    getCountData.append(getTraining)
 
     context = {
         'full_name' : request.session['full_name'],
-        'attend' : kehadiran,
-        'condition' : kondisi
+        'getCountData' : getCountData,
     }
 
     return JsonResponse({'attendance':context}, status=200)
@@ -228,9 +225,9 @@ def add_edit_attend_post(request):
 
     else:
         getStatus = request.GET.get('status', '')
+        getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
         try:
             if getStatus == 'status':
-                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
                 getLatesStatus = UserAttendance.objects.filter(authors_id = getUserId.user_id).latest('id')
                 
                 context = {
@@ -239,7 +236,6 @@ def add_edit_attend_post(request):
                 return JsonResponse({'attendance':context}, status=200)
 
             elif getStatus == 'WFO':
-                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
                 getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFO').latest('id')
 
                 context = {
@@ -253,8 +249,46 @@ def add_edit_attend_post(request):
                 return JsonResponse({'attendance':context}, status=200)
             
             elif getStatus == 'WFH':
-                getUserId = UserProfile.objects.get(full_name = request.session['full_name'])
                 getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'WFH').latest('id')
+
+                context = {
+                    'attendance_status' : getLatesAttend.attendance_status,
+                    'selfassstatus' : getLatesAttend.selfassstatus,
+                    'working_location' : getLatesAttend.working_location,
+                    'wfo_time' : getLatesAttend.wfo_time,
+                    'condition' : getLatesAttend.condition,
+                    'sick_reason' : getLatesAttend.sick_reason,
+                }
+                return JsonResponse({'attendance':context}, status=200)
+
+            elif getStatus == 'Training':
+                getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Training').latest('id')
+
+                context = {
+                    'attendance_status' : getLatesAttend.attendance_status,
+                    'selfassstatus' : getLatesAttend.selfassstatus,
+                    'working_location' : getLatesAttend.working_location,
+                    'wfo_time' : getLatesAttend.wfo_time,
+                    'condition' : getLatesAttend.condition,
+                    'sick_reason' : getLatesAttend.sick_reason,
+                }
+                return JsonResponse({'attendance':context}, status=200)
+
+            elif getStatus == 'Izin':
+                getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Izin').latest('id')
+
+                context = {
+                    'attendance_status' : getLatesAttend.attendance_status,
+                    'selfassstatus' : getLatesAttend.selfassstatus,
+                    'working_location' : getLatesAttend.working_location,
+                    'wfo_time' : getLatesAttend.wfo_time,
+                    'condition' : getLatesAttend.condition,
+                    'sick_reason' : getLatesAttend.sick_reason,
+                }
+                return JsonResponse({'attendance':context}, status=200)
+
+            elif getStatus == 'Cuti':
+                getLatesAttend = UserAttendance.objects.filter(authors_id = getUserId.user_id, attendance_status = 'Cuti').latest('id')
 
                 context = {
                     'attendance_status' : getLatesAttend.attendance_status,
@@ -301,28 +335,30 @@ def manager_page(request):
 
     if getDate == 'now':
 
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getdateNow).count()
-        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow).count()
-    
-        kondisi = []
-
-        kondisi.append(getSehatCondition)
-        kondisi.append(getSakitCondition)
-
-        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getdateNow).count()
-        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getdateNow).count()
-        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow).count()
-        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getdateNow).count()
-
-        kehadiran = []
-        kehadiran.append(getWfoCount+getWfhCount)
-        kehadiran.append(getSakitCount+getIzinCount)
-
         getAllData = UserAttendance.objects.filter(created_at__date = getdateNow).order_by('-created_at')
 
+        getCountData = []
+
+        getWfo = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getdateNow).count()
+        getCountData.append(getWfo)
+
+        getWfh = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getdateNow).count()
+        getCountData.append(getWfh)
+
+        getSick = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getdateNow).count()
+        getCountData.append(getSick)
+
+        getIzin = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getdateNow).count()
+        getCountData.append(getIzin)
+
+        getCuti = UserAttendance.objects.filter(attendance_status = 'Cuti', created_at__date = getdateNow).count()
+        getCountData.append(getCuti)
+
+        getTraining = UserAttendance.objects.filter(attendance_status = 'Training', created_at__date = getdateNow).count()
+        getCountData.append(getTraining)
+
         context = {
-            'attend' : kehadiran,
-            'condition' : kondisi,
+            'getCountData' : getCountData,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,
@@ -334,28 +370,30 @@ def manager_page(request):
 
     elif getDate == 'all':
 
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat').count()
-        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit').count()
-    
-        kondisi = []
-
-        kondisi.append(getSehatCondition)
-        kondisi.append(getSakitCondition)
-
-        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO').count()
-        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH').count()
-        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit').count()
-        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin').count()
-
-        kehadiran = []
-        kehadiran.append(getWfoCount+getWfhCount)
-        kehadiran.append(getSakitCount+getIzinCount)
-
         getAllData = UserAttendance.objects.all().order_by('-created_at')
 
+        getCountData = []
+
+        getWfo = UserAttendance.objects.filter(attendance_status = 'WFO').count()
+        getCountData.append(getWfo)
+
+        getWfh = UserAttendance.objects.filter(attendance_status = 'WFH').count()
+        getCountData.append(getWfh)
+
+        getSick = UserAttendance.objects.filter(attendance_status = 'Sakit').count()
+        getCountData.append(getSick)
+
+        getIzin = UserAttendance.objects.filter(attendance_status = 'Izin').count()
+        getCountData.append(getIzin)
+
+        getCuti = UserAttendance.objects.filter(attendance_status = 'Cuti').count()
+        getCountData.append(getCuti)
+
+        getTraining = UserAttendance.objects.filter(attendance_status = 'Training').count()
+        getCountData.append(getTraining)
+
         context = {
-            'attend' : kehadiran,
-            'condition' : kondisi,
+            'getCountData' : getCountData,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,
@@ -367,28 +405,30 @@ def manager_page(request):
 
     else:
 
-        getSehatCondition = UserAttendance.objects.filter(condition = 'Sehat', created_at__date = getDate).count()
-        getSakitCondition = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getDate).count()
-    
-        kondisi = []
-
-        kondisi.append(getSehatCondition)
-        kondisi.append(getSakitCondition)
-
-        getWfoCount = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getDate).count()
-        getWfhCount = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getDate).count()
-        getSakitCount = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getDate).count()
-        getIzinCount = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getDate).count()
-
-        kehadiran = []
-        kehadiran.append(getWfoCount+getWfhCount)
-        kehadiran.append(getSakitCount+getIzinCount)
-
         getAllData = UserAttendance.objects.filter(created_at__date = getDate).order_by('-created_at')
 
+        getCountData = []
+
+        getWfo = UserAttendance.objects.filter(attendance_status = 'WFO', created_at__date = getDate).count()
+        getCountData.append(getWfo)
+
+        getWfh = UserAttendance.objects.filter(attendance_status = 'WFH', created_at__date = getDate).count()
+        getCountData.append(getWfh)
+
+        getSick = UserAttendance.objects.filter(attendance_status = 'Sakit', created_at__date = getDate).count()
+        getCountData.append(getSick)
+
+        getIzin = UserAttendance.objects.filter(attendance_status = 'Izin', created_at__date = getDate).count()
+        getCountData.append(getIzin)
+
+        getCuti = UserAttendance.objects.filter(attendance_status = 'Cuti', created_at__date = getDate).count()
+        getCountData.append(getCuti)
+
+        getTraining = UserAttendance.objects.filter(attendance_status = 'Training', created_at__date = getDate).count()
+        getCountData.append(getTraining)
+
         context = {
-            'attend' : kehadiran,
-            'condition' : kondisi,
+            'getCountData' : getCountData,
             'sick_name' : getFullNameSakit,
             'attendance' : getAllData,
             'datenow' : getdateNow,

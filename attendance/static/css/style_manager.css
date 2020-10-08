@@ -135,11 +135,6 @@ div.panel {
     background-color: white;
 }
 
-.chart {
-    display: flex;
-    overflow-x: scroll;
-}
-
 #chartbutton {
     position: fixed; 
     bottom: 0;

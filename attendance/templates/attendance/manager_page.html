@@ -166,16 +166,17 @@
       <div class="container" style="margin-top: 15px;">
         <div class="card" style="border-radius: 20px;">
           <div class="card-body">
-            <h5 class="card-title text-primary text-center">DATA KESEHATAN & KEHADIRAN</h5>
+            <h5 class="card-title text-primary text-center">JUMLAH STATUS KEHADIRAN</h5>
             <hr>
             {% if attendance|length == 0 %}
               <div class="alert alert-primary text-center" role="alert">
                 Tidak ada data
               </div>
             {% else %}
-              <div class="chart">
-                <canvas id="myCharts" height="250"></canvas>
-                <canvas id="myChartss" height="250"></canvas>
+              <canvas id="myCharts" height="250px" style="max-height: 100%;"></canvas>
+              <br>
+              <div class="alert alert-primary text-center" style="font-size: x-small;"  role="alert">
+                Sentuh warna pada diagram untuk melihat detail jumlah
               </div>
             {% endif %}
           </div>
@@ -251,16 +252,17 @@
       <div class="container" style="margin-top: 15px;">
         <div class="card" style="border-radius: 20px;">
           <div class="card-body">
-            <h5 class="card-title text-primary text-center">DATA KESEHATAN & KEHADIRAN</h5>
+            <h5 class="card-title text-primary text-center">JUMLAH STATUS KEHADIRAN</h5>
             <hr>
             {% if attendance|length == 0 %}
               <div class="alert alert-primary text-center" role="alert">
                 Tidak ada data
               </div>
             {% else %}
-              <div class="chart">
-                <canvas id="myCharts" height="250"></canvas>
-                <canvas id="myChartss" height="250"></canvas>
+              <canvas id="myCharts" height="250px" style="max-height: 100%;"></canvas>
+              <br>
+              <div class="alert alert-primary text-center" style="font-size: x-small;"  role="alert">
+                Sentuh warna pada diagram untuk melihat detail jumlah 
               </div>
             {% endif %}
           </div>
@@ -394,44 +396,20 @@
         let myPieCharts  = new Chart(kehadiran, {
           type: 'pie',
           data: {
-                labels: ['Hadir', 'Tidak Hadir'],
+                labels: ['WFO', 'WFH', 'Sakit', 'Izin', 'Cuti', 'Training'],
                 datasets: [{
-                    backgroundColor: ['#007bff','#f8f9fa'],
-                    data: {{ attend }},
+                    backgroundColor: ['#007bff', '#5bc0de', '#f0ad4e', '#d9534f', '#5cb85c', '#fef199'],
+                    data: {{ getCountData }},
                 }]
             },
           options: {
-            title: {
-              display : true,
-              text : 'KEHADIRAN',
-              position : 'bottom',
-              fontSize : '18',
-              fontColor : '#0275d8'
+            responsive: true,
+            legend: {
+                position: 'bottom',
             }
           }
         });
   
-        let ctxx = document.getElementById('myChartss').getContext('2d');
-        let myPieChart  = new Chart(ctxx, {
-          type: 'pie',
-          data: {
-                labels: ['Sehat', 'Sakit'],
-                datasets: [{
-                    backgroundColor: ['#007bff','#f8f9fa'],
-                    data: {{ condition }},
-                }]
-            },
-          options: {
-            title: {
-              display : true,
-              text : 'KESEHATAN',
-              position : 'bottom',
-              fontSize : '18',
-              fontColor : '#0275d8'
-            }
-          }
-        });
-
         function slideShows(){
           jQuery('#slideups').slideDown(600);
           document.getElementById("backdrops").style.width = "100%";
